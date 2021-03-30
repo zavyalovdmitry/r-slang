@@ -9,12 +9,12 @@ export default class LangApi {
       }
     }
 
-    static getWords = (group = 0, page = 0, func) => {
+    static getWords = (group = 0, page = 0) => {
       let queryParam = 'words';
       if (group !== null || page !== null) {
         queryParam += '?';
-        queryParam += (group ? `group=${group}` : '') + (page ? `page=${page}` : '');
+        queryParam += (group ? `group=${group}&` : '') + (page ? `page=${page}` : '');
       }
-      fetch(`https://react-rs-lang.herokuapp.com/${queryParam}`).then((d) => d.json()).then((data) => func(data));
+      return fetch(`https://react-rs-lang.herokuapp.com/${queryParam}`);
     }
 }
