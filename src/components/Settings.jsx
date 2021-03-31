@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SettingsContext from './SettingsContext';
-import SettingsCell from './SettingsCell';
+// import SettingsCell from './SettingsCell';
 
 export default class Settings extends Component {
     static contextType = SettingsContext;
