@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DictionaryCell from './DictionaryCell';
 import LangApi from './LangApi';
 import WordsNav from './WordsNav';
+import Settings from './Settings';
 
 class Dictionary extends Component {
   constructor(props) {
@@ -33,12 +34,13 @@ class Dictionary extends Component {
   }
 
   render = () => {
-    const { data } = this.state;
+    const { data, page, group } = this.state;
     const words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
     return (<article>
-    <WordsNav quantity={6} classString="group" changeVal={this.changeGroupAndPage} />
-    <WordsNav quantity={30} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+    <Settings />
+    <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+    <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
          Dictionary
          {words}
       </article>);
