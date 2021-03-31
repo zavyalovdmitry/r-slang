@@ -1,28 +1,21 @@
 import React, { Component } from 'react';
 import SettingsContext from './SettingsContext';
-// import SettingsCell from './SettingsCell';
+import SettingsCell from './SettingsCell';
 
 export default class Settings extends Component {
     static contextType = SettingsContext;
 
     render = () => {
-      console.log('this.context');
-      console.log(this.context);
-      console.log('SettingsContext');
-      console.log(SettingsContext);
-      /* const {
-        wordTranslate, textTranslate, deleteWord, hardWord,
-      } = this.context.value; */
+      const {
+        wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
+      } = this.context;
 
       return (
-            <ul className='menu'>
-               <li>123</li>
-               {
-                   /* <SettingsCell data={wordTranslate} />
-               <SettingsCell data={textTranslate} />
-               <SettingsCell data={deleteWord} />
-               <SettingsCell data={hardWord} /> */
-               }
+            <ul className=''>
+               <SettingsCell data={wordTranslateVisible} />
+               <SettingsCell data={textTranslateVisible} />
+               <SettingsCell data={deleteWordVisible} />
+               <SettingsCell data={hardWordVisible} />
             </ul>
       );
     }

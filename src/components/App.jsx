@@ -20,45 +20,45 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      wordTranslate: { value: true, title: 'отоброжать перевод слова' },
-      textTranslate: { value: true, title: 'отоброжать перевод примеров' },
-      deleteWord: { value: true, title: 'отоброжать кнопку "удалить слово"' },
-      hardWord: { value: true, title: 'отоброжать кнопку "тяжёлое слово"' },
+      wordTranslateVisible: { value: true, title: 'отоброжать перевод слова' },
+      textTranslateVisible: { value: true, title: 'отоброжать перевод примеров' },
+      deleteWordVisible: { value: true, title: 'отоброжать кнопку "удалить слово"' },
+      hardWordVisible: { value: true, title: 'отоброжать кнопку "тяжёлое слово"' },
     };
   }
 
   changeWordTranslate = () => {
     this.setState((prevState) => ({
-      wordTranslate: {
-        value: !prevState.wordTranslate.value,
-        title: prevState.wordTranslate.title,
+      wordTranslateVisible: {
+        value: !prevState.wordTranslateVisible.value,
+        title: prevState.wordTranslateVisible.title,
       },
     }));
   }
 
   changeTextTranslate = () => {
     this.setState((prevState) => ({
-      textTranslate: {
-        value: !prevState.textTranslate.value,
-        title: prevState.textTranslate.title,
+      textTranslateVisible: {
+        value: !prevState.textTranslateVisible.value,
+        title: prevState.textTranslateVisible.title,
       },
     }));
   }
 
   changeDeleteWord = () => {
     this.setState((prevState) => ({
-      deleteWord: {
-        value: !prevState.deleteWord.value,
-        title: prevState.deleteWord.title,
+      deleteWordVisible: {
+        value: !prevState.deleteWordVisible.value,
+        title: prevState.deleteWordVisible.title,
       },
     }));
   }
 
   changeHardWord = () => {
     this.setState((prevState) => ({
-      hardWord: {
-        value: !prevState.hardWord.value,
-        title: prevState.hardWord.title,
+      hardWordVisible: {
+        value: !prevState.hardWordVisible.value,
+        title: prevState.hardWordVisible.title,
       },
     }));
   }
@@ -67,21 +67,20 @@ class App extends Component {
     console.log('SettingsContext');
     console.log(SettingsContext);
     const {
-      wordTranslate, textTranslate, deleteWord, hardWord,
+      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
     } = this.state;
-    wordTranslate.action = this.changeWordTranslate;
-    textTranslate.action = this.changeTextTranslate;
-    deleteWord.action = this.changeDeleteWord;
-    hardWord.action = this.changeHardWord;
-    
+    wordTranslateVisible.action = this.changeWordTranslate;
+    textTranslateVisible.action = this.changeTextTranslate;
+    deleteWordVisible.action = this.changeDeleteWord;
+    hardWordVisible.action = this.changeHardWord;
 
     return (
     <SettingsContext.Provider
         value={{
-          wordTranslate,
-          textTranslate,
-          deleteWord,
-          hardWord,
+          wordTranslateVisible,
+          textTranslateVisible,
+          deleteWordVisible,
+          hardWordVisible,
         }}
       >
     <Header/>

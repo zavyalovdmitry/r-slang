@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DictionaryCell from './DictionaryCell';
 import LangApi from './LangApi';
+import DictionaryCell from './DictionaryCell';
 import WordsNav from './WordsNav';
 import Settings from './Settings';
 
@@ -35,6 +35,7 @@ class Dictionary extends Component {
 
   render = () => {
     const { data, page, group } = this.state;
+
     const words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
     return (<article>

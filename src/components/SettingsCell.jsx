@@ -9,7 +9,7 @@ export default function SettingsCell(props) {
   return (
     <li>
     <label>{title}
-        <input type="checkbox" onClick={action} checked={value} />
+        <input type="checkbox" onChange={action} checked={value} />
     </label>
 </li>
   );
