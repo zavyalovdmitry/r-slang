@@ -25,11 +25,20 @@ const MENU = [
   },
   {
     name: 'Статистика',
-    link: '/statisctics',
+    link: '/statistics',
   },
   {
-    name: 'Войти',
-    link: '/auth',
+    name: 'Профиль',
+    link: '/profile',
+  },
+  {
+    name: 'Вход',
+    link: '/login',
+    isAuth: true,
+  },
+  {
+    name: 'Регистрация',
+    link: '/register',
     isAuth: true,
   },
 ];

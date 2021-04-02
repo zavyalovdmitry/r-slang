@@ -2,7 +2,7 @@ import React from 'react';
 
 const Statisctics = () => (
  <article>
-    Statisctics
+    Your statisctics
  </article>
 );
 

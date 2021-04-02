@@ -9,11 +9,14 @@ import Header from './Header';
 import Main from './Main';
 import Dictionary from './Dictionary';
 import Savanna from './Savanna';
-import Statisctics from './Statisctics';
+import Statistics from './Statistics';
 import Audiobattle from './Audiobattle';
 import Sprint from './Sprint';
 import Ourgame from './Ourgame';
-import Auth from './Auth';
+
+import Register from './Register';
+import Login from './Login';
+import Profile from './Profile';
 
 const App = () => (
   <Fragment>
@@ -25,9 +28,9 @@ const App = () => (
         </Route>
         <Route path="/savana">
           <Savanna/>
-        </Route>
-        <Route path="/statisctics">
-          <Statisctics/>
+        </Route>      
+        <Route path="/Statistics">
+          <Statistics/>
         </Route>
         <Route path="/audiobattle">
           <Audiobattle/>
@@ -38,12 +41,20 @@ const App = () => (
         <Route path="/ourgame">
           <Ourgame/>
         </Route>
-        <Route path="/auth">
-          <Auth/>
-        </Route>
         <Route path="/main">
           <Main/>
         </Route>
+
+        <Route path="/register">
+          <Register/>
+        </Route>
+        <Route path="/login">
+          <Login/>
+        </Route>
+        <Route path="/profile">
+          <Profile/>
+        </Route>  
+
         <Redirect from='/' to='/main' />
       </Switch>
     </main>
