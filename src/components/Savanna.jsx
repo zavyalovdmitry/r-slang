@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { PropTypes } from 'prop-types';
 import LangApi from './LangApi';
-import getRandomNumber from '../utils';
+import { getRandomNumber } from '../utils';
 import ChooseDifficult from './ChooseDifficult';
 import GameSavanna from './GameSavanna';
 
