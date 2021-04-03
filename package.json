@@ -50,6 +50,7 @@
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.6.0",
+    "core-js": "^3.10.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.11.19",
@@ -60,6 +61,7 @@
     "react-router-dom": "^5.2.0",
     "react-validation": "^3.0.7",
     "react-yandex-maps": "^4.6.0",
+    "regenerator-runtime": "^0.13.7",
     "swiper": "^6.5.0",
     "validator": "^13.5.2"
   },

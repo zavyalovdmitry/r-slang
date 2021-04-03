@@ -15,6 +15,8 @@ import CheckButton from "react-validation/build/button";
 
 import AuthService from "../services/auth.service";
 
+const API_URL = "https://react-rs-lang.herokuapp.com/";
+
 const required = value => {
   if (!value) {
     return (
@@ -29,20 +31,20 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      username: "",
+      email: "",
       password: "",
       loading: false,
       message: ""
     };
   }
 
-  onChangeUsername(e) {
+  onChangeEmail(e) {
     this.setState({
-      username: e.target.value
+      email: e.target.value
     });
   }
 
@@ -51,6 +53,39 @@ export default class Login extends Component {
       password: e.target.value
     });
   }
+
+
+
+  loginUser = async user => {
+    const rawResponse = await fetch(API_URL + 'signin', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    });
+    const content = await rawResponse.json();
+  
+    console.log(content);
+  };
+
+  // login(username, password) {
+  //   return axios
+  //     .post(API_URL + "signin", {
+  //       username,
+  //       password,
+  //     })
+  //     .then(response => {
+  //       if (response.data.accessToken) {
+  //         localStorage.setItem("user", JSON.stringify(response.data));
+  //       }
+
+  //       return response.data;
+  //     });
+  // }
+
+
 
   handleLogin(e) {
     e.preventDefault();
@@ -63,7 +98,10 @@ export default class Login extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.username, this.state.password).then(
+      this.loginUser({
+                      'email': this.state.email, 
+                      'password': this.state.password
+                    }).then(
         () => {
           this.props.history.push("/profile");
           window.location.reload();
@@ -99,20 +137,20 @@ export default class Login extends Component {
             className="profile-img-card"
           />
 
-          <Form
+          <Form history={this.props.history}
             onSubmit={this.handleLogin}
             ref={c => {
               this.form = c;
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">Email</label>
               <Input
                 type="text"
                 className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
+                name="email"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
                 validations={[required]}
               />
             </div>

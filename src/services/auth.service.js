@@ -1,9 +1,10 @@
 import axios from "axios";
+import React, { Component } from "react";
 // import http from '../http-common'
 
 const API_URL = "https://react-rs-lang.herokuapp.com/";
 
-class AuthService {
+class AuthService extends Component {
   login(username, password) {
     return axios
       .post(API_URL + "signin", {
@@ -23,17 +24,31 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  register(username, email, password) {
-    return axios.post(API_URL + "signup", {
-      username,
-      email,
-      password,
+  register = async user => {
+    const rawResponse = await fetch(API_URL + 'users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
     });
-  }
+    const content = await rawResponse.json();
+  
+    console.log(content);
+  };
+
+  // register(username, email, password) {
+  //   return axios.post(API_URL + "user", {
+  //     username,
+  //     email,
+  //     password,
+  //   });
+  // }
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }
 }
 
-export default new AuthService();
+export default AuthService;

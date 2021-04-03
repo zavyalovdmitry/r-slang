@@ -45,14 +45,14 @@ const App = () => (
           <Main/>
         </Route>
 
-        <Route path="/register">
-          <Register/>
+        <Route exact path="/register" component={Register}>
+          {/* <Register/> */}
         </Route>
-        <Route path="/login">
-          <Login/>
+        <Route exact path="/login" component={Login}>
+          {/* <Login/> */}
         </Route>
-        <Route path="/profile">
-          <Profile/>
+        <Route exact path="/profile" component={Profile}>
+          {/* <Profile/> */}
         </Route>  
 
         <Redirect from='/' to='/main' />

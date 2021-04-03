@@ -5,6 +5,8 @@
 //    Register
 //  </article>
 // );
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // export default Register;
 
@@ -15,6 +17,8 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth.service";
+
+const API_URL = "https://react-rs-lang.herokuapp.com/";
 
 const required = value => {
   if (!value) {
@@ -91,6 +95,20 @@ export default class Register extends Component {
     });
   }
 
+  register = async user => {
+    const rawResponse = await fetch(API_URL + 'users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    });
+    const content = await rawResponse.json();
+  
+    console.log(content);
+  }
+
   handleRegister(e) {
     e.preventDefault();
 
@@ -102,16 +120,19 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-        this.state.username,
-        this.state.email,
-        this.state.password
-      ).then(
+      this.register({
+        'name': this.state.username,
+        'email': this.state.email,
+        'password': this.state.password
+      }).then(
         response => {
           this.setState({
             message: response.data.message,
             successful: true
           });
+          console.log(this.state.message);
+          this.props.history.push("/profile");
+          window.location.reload();
         },
         error => {
           const resMessage =
