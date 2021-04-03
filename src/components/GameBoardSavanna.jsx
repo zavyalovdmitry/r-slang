@@ -6,15 +6,15 @@ import LifesIndicator from './LifesIndicator';
 import { getRandomNumber, shuffleArray } from '../utils';
 
 const GameBoardSavanna = ({
-  life, dataListWords, changeLife, setFinish,
+  life, dataListWords, changeLife, setFinish, setResult,
 }) => {
   const [currentWord, changeCurrentWord] = useState(0);
+  const [rightAnswers, changeRightAnswers] = useState(0);
   const wordElement = useRef(null);
   const variantsBlock = useRef(null);
-  const listWords = dataListWords;
+  const [listWords] = useState(dataListWords);
   let idInterval;
   listWords[0].wasInGame = true;
-
   const getNextWord = () => {
     for (let i = 0; i < listWords.length; i += 1) {
       if (!listWords[i].wasInGame) {
@@ -50,6 +50,9 @@ const GameBoardSavanna = ({
   const userChoise = (index) => {
     if (index !== currentWord) {
       changeLife(life - 1);
+    } else {
+      changeRightAnswers(rightAnswers + 1);
+      setResult(rightAnswers);
     }
     changeList();
   };
@@ -65,11 +68,11 @@ const GameBoardSavanna = ({
   };
 
   const startAnimation = () => {
-    idInterval = setInterval(changePositionWord, 10);
+    wordElement.current.style.top = 0;
+    idInterval = setInterval(changePositionWord, 30);
   };
 
   const endAnimation = () => {
-    wordElement.current.style.top = 0;
     clearInterval(idInterval);
   };
 
@@ -94,6 +97,7 @@ GameBoardSavanna.propTypes = {
   dataListWords: PropTypes.array,
   changeLife: PropTypes.func,
   setFinish: PropTypes.func,
+  setResult: PropTypes.func,
 };
 
 export default GameBoardSavanna;
