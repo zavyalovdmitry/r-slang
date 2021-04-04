@@ -1,8 +1,9 @@
 import React from 'react';
+import TestLogin from './TestLogin';
 
 const Auth = () => (
  <article>
-    Auth
+    <TestLogin />
  </article>
 );
 
