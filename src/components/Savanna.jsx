@@ -1,9 +1,10 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import LangApi from './LangApi';
 import { getRandomNumber } from '../utils';
 import ChooseDifficult from './ChooseDifficult';
 import GameSavanna from './GameSavanna';
+import Loader from './Loader';
 
 const Savanna = () => {
   const [listWords, setList] = useState([]);
@@ -11,16 +12,23 @@ const Savanna = () => {
 
   useEffect(() => {
     if (difficult) {
-      LangApi.getWords(difficult, getRandomNumber(1, 30))
+      LangApi.getWords(difficult, getRandomNumber(1, 29))
         .then((data) => data.json())
         .then((words) => setList(words));
     }
   }, [difficult]);
 
-  return <Fragment>
-    { difficult > 0 && listWords.length
-      ? <GameSavanna dataListWords={listWords}/> : <ChooseDifficult setDifficult={setDifficult}/>}
-  </Fragment>;
+  const setContent = () => {
+    if (difficult) {
+      if (listWords.length) {
+        return <GameSavanna dataListWords={listWords}/>;
+      }
+      return <Loader/>;
+    }
+    return <ChooseDifficult setDifficult={setDifficult}/>;
+  };
+
+  return setContent();
 };
 
 Savanna.propTypes = {

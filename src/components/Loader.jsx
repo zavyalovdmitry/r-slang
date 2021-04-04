@@ -1,11 +1,12 @@
 import React from 'react';
 
-const Loader = () => <div className="hand">
-<div className="finger"></div>
-<div className="finger"></div>
-<div className="finger"></div>
-<div className="finger"></div>
-<div className="wood"></div>
-<div className="finger-top"></div>
+const Loader = () => <div className="loader-wrap">
+    <div className="loader">
+    <div className="loader__box"></div>
+    <div className="loader__box"></div>
+    <div className="loader__box"></div>
+    <div className="loader__box"></div>
+    <div className="loader__box"></div>
+  </div>
 </div>;
 export default Loader;
