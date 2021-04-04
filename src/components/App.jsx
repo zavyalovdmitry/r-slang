@@ -101,7 +101,7 @@ class App extends Component {
     deleteWordVisible.action = this.changeDeleteWord;
     hardWordVisible.action = this.changeHardWord;
     user.logIn = this.SetlogInUser;
-    user.data = this.state.userWords;
+    user.userWords = this.state.userWords;
     user.cgangeUserWords = this.changeUserData;
 
     return (

@@ -22,7 +22,7 @@ export default class TestLogin extends Component {
         <Fragment>
       <button onClick={this.login} >TEST LOGIN</button>
             <button
-            onClick={() => LangApi.updateUserWords(userKeys.userId, userKeys.token, '5e9f5ee35eb9e72bc21af4b3')} >
+            onClick={() => LangApi.updateUserWords(userKeys.userId, userKeys.token, '5e9f5ee35eb9e72bc21af543', '', true) } >
               TEST QUERY
             </button>
             </Fragment>);

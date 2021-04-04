@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import LangApi from './LangApi';
 import audioIMG from '../assets/image/audio.svg';
@@ -13,6 +13,7 @@ export default class DictionaryCell extends Component {
       // eslint-disable-next-line max-len
       id, word, image, audioMeaning, audio, audioExample, textMeaning, textExample, transcription, wordTranslate, textMeaningTranslate, textExampleTranslate,
     } = this.props.data;
+    const action = this.props.changeWordStatus !== undefined ? this.props.changeWordStatus : false;
 
     const {
       wordTranslateVisible, textTranslateVisible, /* deleteWordVisible, hardWordVisible, */
@@ -24,7 +25,7 @@ export default class DictionaryCell extends Component {
     };
 
     return (
-      <div id={id} className='wordBlock'>
+      <div id={id} className={`wordBlock ${this.props.classStyle !== null ? this.props.classStyle : ''}`} >
         <div className='wordIMG'>
           <img src={LangApi.homeApi + image} />
         </div>
@@ -35,6 +36,13 @@ export default class DictionaryCell extends Component {
           </span>
           <span>{transcription}</span>
           {wordTranslateVisible.value && <span>{wordTranslate}</span>}
+          {
+            action !== false
+            && <Fragment>
+                  <button onClick={() => action(true)}>hard</button>
+                  <button onClick={() => action(false)}> delete</button>
+              </Fragment>
+          }
         </p>
         <p>
           <img src={audioIMG} onClick={() => playAudio(audioMeaning)} />
@@ -53,4 +61,6 @@ export default class DictionaryCell extends Component {
 
 DictionaryCell.propTypes = {
   data: PropTypes.object.isRequired,
+  classStyle: PropTypes.string,
+  changeWordStatus: PropTypes.func,
 };
