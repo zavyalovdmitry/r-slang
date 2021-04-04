@@ -15,6 +15,7 @@ import Sprint from './Sprint';
 import Ourgame from './Ourgame';
 import Auth from './Auth';
 import SettingsContext from './SettingsContext';
+import LangApi from './LangApi';
 
 class App extends Component {
   constructor() {
@@ -24,7 +25,19 @@ class App extends Component {
       textTranslateVisible: { value: true, title: 'отоброжать перевод примеров' },
       deleteWordVisible: { value: true, title: 'отоброжать кнопку "удалить слово"' },
       hardWordVisible: { value: true, title: 'отоброжать кнопку "тяжёлое слово"' },
+      user: {
+        userId: null,
+        token: null,
+      },
+      userWords: [],
     };
+  }
+
+  componentDidMount = () => {
+    if (sessionStorage.getItem('auth') !== null) {
+      const { userId, token } = JSON.parse(sessionStorage.getItem('auth'));
+      this.SetlogInUser(userId, token);
+    }
   }
 
   changeWordTranslate = () => {
@@ -63,16 +76,33 @@ class App extends Component {
     }));
   }
 
+  SetlogInUser = (userId, token) => {
+    this.setState(() => ({ user: { userId, token } }),
+      () => {
+        this.changeUserData();
+      });
+  }
+
+  changeUserData = () => {
+    const { userId, token } = this.state.user;
+    LangApi.getUserWords(userId, token)
+      .then((data) => data.json())
+      .then((userWords) => {
+        this.setState({ userWords });
+      });
+  }
+
   render = () => {
-    console.log('SettingsContext');
-    console.log(SettingsContext);
     const {
-      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
+      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible, user,
     } = this.state;
     wordTranslateVisible.action = this.changeWordTranslate;
     textTranslateVisible.action = this.changeTextTranslate;
     deleteWordVisible.action = this.changeDeleteWord;
     hardWordVisible.action = this.changeHardWord;
+    user.logIn = this.SetlogInUser;
+    user.data = this.state.userWords;
+    user.cgangeUserWords = this.changeUserData;
 
     return (
     <SettingsContext.Provider
@@ -81,6 +111,7 @@ class App extends Component {
           textTranslateVisible,
           deleteWordVisible,
           hardWordVisible,
+          user,
         }}
       >
     <Header/>

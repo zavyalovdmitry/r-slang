@@ -17,6 +17,10 @@ class Dictionary extends Component {
 
   componentDidMount = () => {
     this.changeGroupAndPage(this.props.page, this.props.group);
+    if (sessionStorage.getItem('auth') !== null) {
+      const { userId, token } = JSON.parse(sessionStorage.getItem('auth'));
+      this.setState({ userId, token });
+    }
   }
 
   changeGroupAndPage = (group = null, page = null) => {
@@ -35,6 +39,8 @@ class Dictionary extends Component {
 
   render = () => {
     const { data, page, group } = this.state;
+
+    /* if() */
 
     const words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
