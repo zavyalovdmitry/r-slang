@@ -8,18 +8,18 @@ import Loader from './Loader';
 
 const Savanna = () => {
   const [listWords, setList] = useState([]);
-  const [difficult, setDifficult] = useState(0);
+  const [difficult, setDifficult] = useState(-1);
 
   useEffect(() => {
-    if (difficult) {
-      LangApi.getWords(difficult, getRandomNumber(1, 29))
+    if (difficult !== -1) {
+      LangApi.getWords(difficult, getRandomNumber(0, 29))
         .then((data) => data.json())
         .then((words) => setList(words));
     }
   }, [difficult]);
 
   const setContent = () => {
-    if (difficult) {
+    if (difficult !== -1) {
       if (listWords.length) {
         return <GameSavanna dataListWords={listWords}/>;
       }
