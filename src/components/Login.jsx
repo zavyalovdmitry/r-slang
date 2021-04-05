@@ -13,6 +13,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
+import { UserContextConsumer } from "./UserContext";
 import AuthService from "../services/auth.service";
 
 const API_URL = "https://react-rs-lang.herokuapp.com/";
@@ -54,7 +55,7 @@ export default class Login extends Component {
     });
   }
 
-
+  static contextType = UserContextConsumer;
 
   loginUser = async user => {
     const rawResponse = await fetch(API_URL + 'signin', {
@@ -67,7 +68,8 @@ export default class Login extends Component {
     });
     const content = await rawResponse.json();
   
-    console.log(content);
+    // console.log(content.userId, content.token);
+    this.context.toggleUser(content.userId, content.token)
   };
 
   // login(username, password) {

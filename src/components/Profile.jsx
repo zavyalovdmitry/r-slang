@@ -85,7 +85,7 @@ import { UserContextConsumer } from "./UserContext";
 
 
 
-class Profile extends Component {
+export default class Profile extends Component {
   constructor(props) {
     super(props);
 
@@ -94,10 +94,12 @@ class Profile extends Component {
     };
   }
 
+  static contextType = UserContextConsumer;
+
   render() {
     // const { currentUser } = this.state;
-    
-    // const user = this.context;
+    // console.log(this.context);
+    const user = this.context;
     return (
       // <UserContextConsumer>
         <div className="container">
@@ -108,12 +110,14 @@ class Profile extends Component {
           </header>
           <p>
             <strong>Token:</strong>{" "}
+            {user.jwt}
             {/* {currentUser.accessToken.substring(0, 20)} ...{" "}
             {currentUser.accessToken.substr(currentUser.accessToken.length - 20)} */}
           </p>
           <p>
             <strong>Id:</strong>{" "}
             {/* {currentUser.id} */}
+            {user.id}
           </p>
           <p>
             <strong>Email:</strong>{" "}
@@ -125,8 +129,6 @@ class Profile extends Component {
               currentUser.roles.map((role, index) => <li key={index}>{role}</li>)} */}
           </ul>
           {/* {user} */}
-          {/* {user.id}
-          {user.jwt} */}
           {/* {context => context.id} */}
         </div>
       // </UserContextConsumer>
@@ -134,5 +136,5 @@ class Profile extends Component {
   }
 }
 
-Profile.contextType = UserContextConsumer;
-export default Profile;
+// Profile.contextType = UserContextConsumer;
+// export default Profile;

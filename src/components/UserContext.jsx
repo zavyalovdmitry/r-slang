@@ -2,10 +2,14 @@ import React, { Component } from "react";
 const { Provider, Consumer } = React.createContext();
 
 class UserContextProvider extends Component {
-  state = {
-    id: "345345",
-    jwt: 'fgmri4695jtkne'
-  };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: "345345",
+            jwt: 'fgmri4695jtkne'
+        };
+    }
 
   toggleUser = (id, jwt) => {
     this.setState({
