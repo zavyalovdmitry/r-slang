@@ -28,8 +28,17 @@ const MENU = [
     link: '/statisctics',
   },
   {
-    name: 'Войти',
+    name: 'Профиль',
+    link: '/profile',
+  },
+  {
+    name: 'Вход',
     link: '/auth',
+    isAuth: true,
+  },
+  {
+    name: 'Регистрация',
+    link: '/register',
     isAuth: true,
   },
 ];

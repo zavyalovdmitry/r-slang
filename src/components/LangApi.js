@@ -22,20 +22,35 @@ export default class LangApi {
       return fetch(`${this.homeApi}${queryParam}`);
     }
 
-    static TestLogIn = (email, password) => {
-      const signin = {
-        email,
-        password,
-      };
-      return fetch(`${this.homeApi}signin`, {
+    // static loginUser = (email, password) => {
+    //   const signin = {
+    //     email,
+    //     password,
+    //   };
+    //   return fetch(`${this.homeApi}signin`, {
+    //     method: 'POST',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(signin),
+    //   });
+    // }
+
+    static loginUser = async user => {
+      const rawResponse = await fetch(this.homeApi + 'signin', {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(signin),
+        body: JSON.stringify(user)
       });
-    }
+      const content = await rawResponse.json();
+      return(content);
+      // console.log(content.userId, content.token);
+      // this.context.toggleUser(content.userId, content.token)
+    };
 
     static getUserWords = (userId, token, wordId = '') => {
       const url = `${this.homeApi}users/${userId}/words${wordId ? `/${wordId}` : ''}`;

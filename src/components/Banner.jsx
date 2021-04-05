@@ -10,7 +10,7 @@ const Banner = () => (
     <h2 className='banner-sub-title'>Говори правильно!</h2>
     <div className='banner-content-text'>
       <p className='banner-text banner-text--cross-out'>Герара хир</p>
-      <p className='banner-text'>Get out here</p>
+      <p className='banner-text'>Get out of here</p>
     </div>
     <a href='#advantages' className='banner-link'>
       <img src={arrow} alt="go"/>

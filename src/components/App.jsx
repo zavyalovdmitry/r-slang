@@ -16,6 +16,9 @@ import Ourgame from './Ourgame';
 import Auth from './Auth';
 import SettingsContext from './SettingsContext';
 import LangApi from './LangApi';
+import Register from './Register';
+import Login from './Login';
+import Profile from './Profile';
 
 class App extends Component {
   constructor() {
@@ -135,9 +138,15 @@ class App extends Component {
         <Route path="/ourgame">
           <Ourgame/>
         </Route>
-        <Route path="/auth">
-          <Auth/>
+        <Route exact path="/register" component={Register}>
+          {/* <Register/> */}
         </Route>
+        <Route exact path="/auth" component={Login}>
+          {/* <Login/> */}
+        </Route>
+        <Route exact path="/profile" component={Profile}>
+          {/* <Profile/> */}
+        </Route>  
         <Route path="/main">
           <Main/>
         </Route>
