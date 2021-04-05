@@ -10,7 +10,7 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Данное поле обязательно для заполнения!
       </div>
     );
   }
@@ -56,16 +56,17 @@ export default class Login extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      LangApi.loginUser({
+      LangApi.user({
                       'email': this.state.email, 
                       'password': this.state.password
-                    }).then(
+                    }, LangApi.userApiLog).then(
         (loginData) => {
           sessionStorage.removeItem('auth');
           sessionStorage.setItem('auth', JSON.stringify(loginData));
           this.context.user.logIn(loginData.userId, loginData.token);
           this.props.history.push("/profile");
           window.location.reload();
+          // console.log(sessionStorage);
         },
         error => {
           const resMessage =
@@ -74,10 +75,10 @@ export default class Login extends Component {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
+          console.log(resMessage);
           this.setState({
             loading: false,
-            message: resMessage
+            message: 'Неверный email или пароль.'
           });
         }
       );
@@ -117,7 +118,7 @@ export default class Login extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">Пароль</label>
               <Input
                 type="password"
                 className="form-control"
@@ -136,7 +137,7 @@ export default class Login extends Component {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Login</span>
+                <span>Вход</span>
               </button>
             </div>
 

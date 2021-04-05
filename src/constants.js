@@ -26,10 +26,12 @@ const MENU = [
   {
     name: 'Статистика',
     link: '/statisctics',
+    isUsers: true,
   },
   {
     name: 'Профиль',
     link: '/profile',
+    isUsers: true,
   },
   {
     name: 'Вход',

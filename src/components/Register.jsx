@@ -6,6 +6,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import LangApi from './LangApi';
 
 const API_URL = "https://react-rs-lang.herokuapp.com/";
 
@@ -13,7 +14,7 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Данное поле обязательно для заполнения!
       </div>
     );
   }
@@ -23,7 +24,7 @@ const email = value => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
-        This is not a valid email.
+        Неверный формат email.
       </div>
     );
   }
@@ -33,7 +34,7 @@ const vusername = value => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+        Имя пользователя должно содержать от 3 да 20 символов.
       </div>
     );
   }
@@ -43,7 +44,7 @@ const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+        Пароль должен содержать от 6 да 40 символов.
       </div>
     );
   }
@@ -84,20 +85,6 @@ export default class Register extends Component {
     });
   }
 
-  register = async user => {
-    const rawResponse = await fetch(API_URL + 'users', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    });
-    const content = await rawResponse.json();
-  
-    console.log(content);
-  }
-
   handleRegister(e) {
     e.preventDefault();
 
@@ -109,18 +96,19 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      this.register({
+      LangApi.user({
         'name': this.state.username,
         'email': this.state.email,
         'password': this.state.password
-      }).then(
+      }, LangApi.userApiReg).then(
         response => {
           this.setState({
-            message: response.data.message,
+            message: 'Вы зарегистрированы!',
             successful: true
           });
-          console.log(this.state.message);
-          this.props.history.push("/profile");
+          // console.log(this.state.message);
+          console.log(response);
+          this.props.history.push("/");
           window.location.reload();
         },
         error => {
@@ -133,7 +121,7 @@ export default class Register extends Component {
 
           this.setState({
             successful: false,
-            message: resMessage
+            message: 'Такой пользователь уже существует!'
           });
         }
       );
@@ -159,7 +147,7 @@ export default class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="username">Имя</label>
                   <Input
                     type="text"
                     className="form-control"
@@ -183,7 +171,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Пароль</label>
                   <Input
                     type="password"
                     className="form-control"
@@ -195,7 +183,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block">Регистрация</button>
                 </div>
               </div>
             )}

@@ -1,5 +1,7 @@
 export default class LangApi {
     static homeApi='https://react-rs-lang.herokuapp.com/';
+    static userApiReg = 'users';
+    static userApiLog = 'signin';
 
     static wordGoal={
       hard: 12, low: 6, del: 0, success: 0,
@@ -22,23 +24,8 @@ export default class LangApi {
       return fetch(`${this.homeApi}${queryParam}`);
     }
 
-    // static loginUser = (email, password) => {
-    //   const signin = {
-    //     email,
-    //     password,
-    //   };
-    //   return fetch(`${this.homeApi}signin`, {
-    //     method: 'POST',
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(signin),
-    //   });
-    // }
-
-    static loginUser = async user => {
-      const rawResponse = await fetch(this.homeApi + 'signin', {
+    static user = async (user, url) => {
+      const rawResponse = await fetch(this.homeApi + url, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -48,9 +35,20 @@ export default class LangApi {
       });
       const content = await rawResponse.json();
       return(content);
-      // console.log(content.userId, content.token);
-      // this.context.toggleUser(content.userId, content.token)
-    };
+    }
+
+    // static loginUser = async user => {
+    //   const rawResponse = await fetch(this.homeApi + userApiLog, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(user)
+    //   });
+    //   const content = await rawResponse.json();
+    //   return(content);
+    // };
 
     static getUserWords = (userId, token, wordId = '') => {
       const url = `${this.homeApi}users/${userId}/words${wordId ? `/${wordId}` : ''}`;

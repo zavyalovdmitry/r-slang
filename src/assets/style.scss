@@ -1038,3 +1038,41 @@ footer {
 		#{$i * 15 + 25}% { transform-origin: center top; transform: scalex(1.3) scaley(0.7);}
 	}
 }
+
+
+
+
+
+.card-container {
+  width: 300px;
+}
+
+.col-md-12 {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary,
+.btn-primary:focus {
+  color: #fff;
+  background-color: black;
+  border-color: black;
+}
+
+.btn-primary:hover {
+  color: black;
+  background-color: #fff;
+  border-color: black;
+}
+
+// .btn-primary-active {
+//   color: #fff;
+//   background-color: black;
+//   border-color: black;  
+// }
+
+.menu-link,
+.menu-link:hover {
+  text-decoration: none;
+  color: white;
+}
