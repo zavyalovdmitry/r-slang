@@ -8,8 +8,6 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import LangApi from './LangApi';
 
-const API_URL = "https://react-rs-lang.herokuapp.com/";
-
 const required = value => {
   if (!value) {
     return (
@@ -106,7 +104,6 @@ export default class Register extends Component {
             message: 'Вы зарегистрированы!',
             successful: true
           });
-          // console.log(this.state.message);
           console.log(response);
           this.props.history.push("/");
           window.location.reload();

@@ -37,18 +37,19 @@ export default class LangApi {
       return(content);
     }
 
-    // static loginUser = async user => {
-    //   const rawResponse = await fetch(this.homeApi + userApiLog, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(user)
-    //   });
-    //   const content = await rawResponse.json();
-    //   return(content);
-    // };
+    static getUserInfo = async (userId, token) => {
+      const url = `${this.homeApi}users/${userId}`;
+      return await fetch(url,
+        {
+          method: 'GET',
+          withCredentials: true,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        });
+    };
 
     static getUserWords = (userId, token, wordId = '') => {
       const url = `${this.homeApi}users/${userId}/words${wordId ? `/${wordId}` : ''}`;

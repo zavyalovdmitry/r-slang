@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import SettingsContext from './SettingsContext';
+import LangApi from './LangApi';
 
 export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userData: {
+        name: '',
+        email: ''
+      }
+    };
+  }
 
   static contextType = SettingsContext;
-
-  // getCurrentUser() {
-  //   return JSON.parse(localStorage.getItem('user'));
-  // }
 
   logOut = () => {
     sessionStorage.removeItem('auth');
@@ -15,10 +21,20 @@ export default class Profile extends Component {
     window.location.reload();
   }
 
+  getUserData = () => {
+  LangApi.getUserInfo(this.context.user.userId, 
+                      this.context.user.token)
+          .then((data) => data.json())
+          .then((userData) => {
+            this.setState({
+              userData: userData
+            })
+          });  
+  }
+
   render() {
-    const user = this.context;
-    // console.log(this.context.user);
-    // console.log(sessionStorage.auth ? 'in' : 'out')
+    this.getUserData();
+
     return (
       <div className="col-md-12">
         <div className="card card-container">
@@ -27,22 +43,18 @@ export default class Profile extends Component {
             alt="profile-img"
             className="profile-img-card"
           />
-          {/* <div className="jumbotron">
-            <h3>
-            </h3>
-          </div> */}
-          {/* <p>
-            <strong>Token:</strong>{" "}
-            {this.context.user.token}
-          </p> */}
           <p>
             <strong>Id:</strong>{" "}
             {this.context.user.userId}
           </p>
           <p>
             <strong>Email:</strong>{" "}
+            {this.state.userData.email}
           </p>
-          <strong>Имя:</strong>
+          <p>
+            <strong>Имя:</strong>{" "}
+            {this.state.userData.name}
+          </p>
           <div className="form-group">
             <button className="btn btn-primary btn-block" onClick={this.logOut}>Выход</button>
           </div>
