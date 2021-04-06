@@ -54,6 +54,7 @@ export default class DictionaryCell extends Component {
           <span dangerouslySetInnerHTML={{ __html: `${textExample}` }} />
         </p>
         {textTranslateVisible.value && <p className='word'>{textExampleTranslate}</p>}
+        <p className='status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
       </div>
     );
   }

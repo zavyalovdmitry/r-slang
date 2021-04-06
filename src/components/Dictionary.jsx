@@ -14,6 +14,7 @@ class Dictionary extends Component {
       page: 0,
       group: 0,
       section: 0,
+      refresh: false,
     };
   }
 
@@ -44,8 +45,8 @@ class Dictionary extends Component {
   // status: false - del, true - hard
   changeWordStatus = (wordId, status) => {
     const { userId, token } = this.context.user;
-    LangApi.updateUserWords(userId, token, wordId, '', status)
-      .then(() => this.forceUpdate());
+    LangApi.updateUserWords(userId, token, wordId, null, status)
+      .then(() => this.context.user.changeUserWords());
   }
 
   render = () => {
@@ -54,9 +55,9 @@ class Dictionary extends Component {
     // разделы словаря
     const sections = [
       { title: 'слова', value: 0 },
-      { title: 'изучаемые слова', value: 1 },
-      { title: 'сложные слова', value: 2 },
-      { title: 'удалённые слова', value: 3 },
+      { title: 'изучаемые слова', value: 1, difficulty: ['low', 'hard'] },
+      { title: 'сложные слова', value: 2, difficulty: ['hard'] },
+      { title: 'удалённые слова', value: 3, difficulty: ['del', 'success'] },
     ];
 
     const {
