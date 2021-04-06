@@ -5,6 +5,7 @@ import DictionaryCell from './DictionaryCell';
 import WordsNav from './WordsNav';
 import Settings from './Settings';
 import SettingsContext from './SettingsContext';
+import Loader from './Loader';
 
 class Dictionary extends Component {
   constructor(props) {
@@ -85,20 +86,27 @@ class Dictionary extends Component {
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
-    return (<article>
-    <Settings />
-    {auth
-    && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />
-    }
-    {section === 0
-    && <Fragment>
-        <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
-        <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
-    </Fragment>
-    }
-         Dictionary
-         {words}
-      </article>);
+    return <article>
+      {this.state.data.length ? <Fragment>
+        <Settings />
+        {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
+        {section === 0
+        && <Fragment>
+              <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+              <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+            </Fragment>}
+        <div className="words-wrap">
+          {words}
+        </div>
+        {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
+        {section === 0
+        && <Fragment>
+              <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+              <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+            </Fragment>}
+      </Fragment>
+        : <Loader/>}
+      </article>;
   }
 }
 

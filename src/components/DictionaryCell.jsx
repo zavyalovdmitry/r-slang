@@ -25,35 +25,39 @@ export default class DictionaryCell extends Component {
     };
 
     return (
-      <div id={id} className={`wordBlock ${this.props.classStyle !== null ? this.props.classStyle : ''}`} >
-        <div className='wordIMG'>
+      <div id={id} className={`word-item ${this.props.classStyle !== null ? this.props.classStyle : ''}`} >
+        <div className='word-item__img-wrap'>
           <img src={LangApi.homeApi + image} />
         </div>
-        <p className='word'>
-          <span>
-            {word}
-            <img src={audioIMG} onClick={() => playAudio(audio)} />
-          </span>
-          <span>{transcription}</span>
-          {wordTranslateVisible.value && <span>{wordTranslate}</span>}
-          {
-            action !== false
-            && <Fragment>
-                  <button onClick={() => action(true)}>hard</button>
-                  <button onClick={() => action(false)}> delete</button>
-              </Fragment>
-          }
-        </p>
-        <p>
-          <img src={audioIMG} onClick={() => playAudio(audioMeaning)} />
-          <span dangerouslySetInnerHTML={{ __html: `${textMeaning}` }} />
-        </p>
-        {textTranslateVisible.value && <p className='word'>{textMeaningTranslate}</p>}
-        <p>
-          <img src={audioIMG} onClick={() => playAudio(audioExample)} />
-          <span dangerouslySetInnerHTML={{ __html: `${textExample}` }} />
-        </p>
-        {textTranslateVisible.value && <p className='word'>{textExampleTranslate}</p>}
+        <div className="word-item__info">
+          <div className="word-item__title-block">
+            <h2 className="word-item__title-eng">{word}</h2>
+            <p className="word-item__title-transcription">{transcription}</p>
+            <img className="word-item__title-sound" src={audioIMG} onClick={() => playAudio(audio)} />
+            <span className="word-item__title-slash">/</span>
+            <h3 className="word-item__title-translate">{wordTranslateVisible.value && wordTranslate}</h3>
+          </div>
+          <div className="word-item__examples">
+            <h3 className="word-item__examples-title">Примеры:</h3>
+            <p>
+              <img src={audioIMG} onClick={() => playAudio(audioMeaning)} />
+              <span dangerouslySetInnerHTML={{ __html: `${textMeaning}` }} />
+            </p>
+            {textTranslateVisible.value && <p className='word'>{textMeaningTranslate}</p>}
+            <p>
+              <img src={audioIMG} onClick={() => playAudio(audioExample)} />
+              <span dangerouslySetInnerHTML={{ __html: `${textExample}` }} />
+            </p>
+            {textTranslateVisible.value && <p className='word'>{textExampleTranslate}</p>}
+          </div>
+        </div>
+        {
+              action !== false
+              && <Fragment>
+                    <button onClick={() => action(true)}>hard</button>
+                    <button onClick={() => action(false)}> delete</button>
+                </Fragment>
+            }
       </div>
     );
   }

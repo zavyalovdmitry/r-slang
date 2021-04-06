@@ -99,7 +99,7 @@ button {
         color: #000;
         
         &:hover {
-          border: none;
+          border: 1px solid transparent;
         }
       }
     }
@@ -1050,6 +1050,7 @@ footer {
 .col-md-12 {
   display: flex;
   justify-content: center;
+  padding-top: 20px;
 }
 
 .btn-primary,
@@ -1075,4 +1076,88 @@ footer {
 .menu-link:hover {
   text-decoration: none;
   color: white;
+}
+
+/*dictionary*/
+
+
+
+.nav-dictionary {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+.words-wrap {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+
+.word-item {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(250, 250, 250);
+  border-radius: 10px;
+}
+
+.word-item__img-wrap {
+  width: 200px;
+  min-width: 200px;
+  height: 200px;
+  margin-right: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.word-item__title-block {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  * {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+}
+
+.word-item__examples-title {
+  margin: 10px 0;
+}
+
+@media(max-width:600px) {
+  .word-item {
+    flex-direction: column;
+    align-items: center;
+  }
+  .word-item__img-wrap  {
+    margin-bottom: 20px;
+  }
 }

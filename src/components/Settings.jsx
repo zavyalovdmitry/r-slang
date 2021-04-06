@@ -11,7 +11,7 @@ export default class Settings extends Component {
       } = this.context;
 
       return (
-            <ul className=''>
+            <ul className='settings-block'>
                <SettingsCell data={wordTranslateVisible} />
                <SettingsCell data={textTranslateVisible} />
                <SettingsCell data={deleteWordVisible} />

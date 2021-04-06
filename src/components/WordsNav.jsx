@@ -8,18 +8,18 @@ export default function WordsNav(props) {
     points = props.navData.map(
       (val) => {
         const { title, value } = val;
-        return <li className={`menu-item${active === value ? ' active' : ''}` } key={value} onClick={() => changeVal(value)}>{title}</li>;
+        return <li className={`nav-item${active === value ? ' active' : ''}` } key={value} onClick={() => changeVal(value)}>{title}</li>;
       },
     );
   } else if (props.quantity !== undefined) {
     arr = new Array(props.quantity).fill(0);
     points = arr.map(
-      (_val, index) => <li className={`menu-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>,
+      (_val, index) => <li className={`nav-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>,
     );
   }
 
   return (
-        <ul className={`menu ${classString}`}>
+        <ul className={`nav-dictionary ${classString}`}>
             {points}
         </ul>
   );
