@@ -1,11 +1,20 @@
 export default class LangApi {
     static homeApi='https://react-rs-lang.herokuapp.com/';
+
     static userApiReg = 'users';
+
     static userApiLog = 'signin';
 
     static wordGoal={
       hard: 12, low: 6, del: 0, success: 0,
     };
+
+    static querys = [
+      '{"userWord.difficulty":{ "$not": {"$in": ["del","success"]}}}',
+      '{"userWord.difficulty": {"$in": ["hard","low"]}}',
+      '{"userWord.difficulty": {"$eq": "hard"}}',
+      '{"userWord.difficulty": {"$in": ["del","success"]}}',
+    ];
 
     static getWordById = (id, func) => {
       if (id !== null) {
@@ -28,25 +37,25 @@ export default class LangApi {
       const rawResponse = await fetch(this.homeApi + url, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(user),
       });
       const content = await rawResponse.json();
-      return(content);
+      return (content);
     }
 
     static getUserInfo = async (userId, token) => {
       const url = `${this.homeApi}users/${userId}`;
-      return await fetch(url,
+      return fetch(url,
         {
           method: 'GET',
           withCredentials: true,
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
         });
     };
@@ -64,18 +73,13 @@ export default class LangApi {
         });
     }
 
-    static getUserWordsWithFilter = (userId, token, qry = 0, page = 0) => {
-      // 0 - notDel, 1- del, 2 - studied,3 - hard
-      const querys = [
-        '{"userWord.difficulty":{ "$not": {"$in": ["del","success"]}}}',
-        '{"userWord.difficulty": {"$in": ["del","success"]}}',
-        '{"userWord.difficulty": {"$in": ["hard","low"]}}',
-        '{"userWord.difficulty": {"$eq": "hard"}}',
-      ];
+    static getUserWordsWithFilter = (userId, token, qry = 0, group = null, page = 0) => {
+      // 0 - слова , 1- изучаемын, 2 - сложные,3 - удалённые
+      const chosenGroup = group === null ? '' : `group=${group}&`;
 
-      const query = encodeURIComponent(querys[qry]);
+      const query = encodeURIComponent(this.querys[qry]);
 
-      const url = `${this.homeApi}users/${userId}/aggregatedWords?page=${page}&wordsPerPage=20&filter=${query}`;
+      const url = `${this.homeApi}users/${userId}/aggregatedWords?${chosenGroup}page=${page}&wordsPerPage=20&filter=${query}`;
       console.log(url);
       return fetch(url,
         {
@@ -88,9 +92,12 @@ export default class LangApi {
         })
         .then((data) => data.json())
         .then((words) => {
-          console.log(words[0]);
+          /* console.log(words[0]);
           console.log(words[0].totalCount[0].count); // колличество таких элементов всего
-          console.log(words[0].paginatedResults); // массив значений
+          console.log(words[0].paginatedResults); // массив значений */
+          const pageCount = Math.ceil(words[0].totalCount[0].count / 20);
+          const data = words[0].paginatedResults;
+          return { pages: pageCount, data };
         });
     }
 
@@ -161,4 +168,40 @@ export default class LangApi {
           body: JSON.stringify(word),
         });
       })
+
+      /*static urlForSearchCount = (grExist, i, query) => {
+        let filter;
+        if (grExist) filter = encodeURIComponent(`{"$and":[${this.querys[query]}, {"page": ${i}}] `);
+        else filter= encodeURIComponent(this.querys[query]);
+        const url = `${this.homeApi}users/${userId}/aggregatedWords?${gr}${i}&wordsPerPage=1&filter=${query}`;
+      }*/
+
+      static groupCount = async (userId, token, group = null, qry = 0) => {
+        const check = [];
+        const query = encodeURIComponent(this.querys[qry]);
+        const grExist = group !== null;
+        const gr = grExist ? `group=${group}&page=` : 'group=';
+        const max = grExist ? 30 : 6;
+        for (let i = 0; i < max; i += 1) {
+          const url = `${this.homeApi}users/${userId}/aggregatedWords?${gr}${i}&wordsPerPage=1&filter=${query}`;
+          check[i] = fetch(url,
+            {
+              method: 'GET',
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+              },
+            })
+            .then((data) => data.json())
+            .then((words) => {
+              console.log(words);
+              const pageCount = words[0].totalCount.length > 0 ? words[0].totalCount[0].count : 0;
+              return pageCount > 0;
+            });
+        }
+        const res = await Promise.all(check).then((values) => values);
+        console.log(res);
+        return res;
+      }
 }
