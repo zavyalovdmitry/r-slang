@@ -11,7 +11,7 @@ export default class DictionaryCell extends Component {
   render = () => {
     const {
       // eslint-disable-next-line max-len
-      id, word, image, audioMeaning, audio, audioExample, textMeaning, textExample, transcription, wordTranslate, textMeaningTranslate, textExampleTranslate,
+      id, _id, word, image, audioMeaning, audio, audioExample, textMeaning, textExample, transcription, wordTranslate, textMeaningTranslate, textExampleTranslate,
     } = this.props.data;
     const action = this.props.changeWordStatus !== undefined ? this.props.changeWordStatus : false;
 
@@ -23,9 +23,8 @@ export default class DictionaryCell extends Component {
       langAudio.src = LangApi.homeApi + audioName;
       langAudio.play();
     };
-
     return (
-      <div id={id} className={`word-item ${this.props.classStyle !== null ? this.props.classStyle : ''}`} >
+      <div id={id || _id} className={`word-item ${this.props.classStyle !== null ? this.props.classStyle : ''}`} >
         <div className='word-item__img-wrap'>
           <img src={LangApi.homeApi + image} />
         </div>
@@ -58,6 +57,7 @@ export default class DictionaryCell extends Component {
                     <button onClick={() => action(false)}> delete</button>
                 </Fragment>
             }
+             <p className='status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
       </div>
     );
   }

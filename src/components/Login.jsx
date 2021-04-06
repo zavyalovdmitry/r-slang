@@ -1,19 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import LangApi from './LangApi';
-import SettingsContext from './SettingsContext';
 
 import Form from 'react-validation/build/form';
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import Input from 'react-validation/build/input';
+import CheckButton from 'react-validation/build/button';
+import SettingsContext from './SettingsContext';
+import LangApi from './LangApi';
 
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Данное поле обязательно для заполнения!
-      </div>
-    );
-  }
+const required = (value) => {
+  const message = !value ? (
+    <div className="alert alert-danger" role="alert">
+    Данное поле обязательно для заполнения!
+  </div>
+  ) : null;
+  return message;
 };
 
 export default class Login extends Component {
@@ -24,10 +23,10 @@ export default class Login extends Component {
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       loading: false,
-      message: ""
+      message: '',
     };
   }
 
@@ -35,13 +34,13 @@ export default class Login extends Component {
 
   onChangeEmail(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -49,42 +48,41 @@ export default class Login extends Component {
     e.preventDefault();
 
     this.setState({
-      message: "",
-      loading: true
+      message: '',
+      loading: true,
     });
 
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
       LangApi.user({
-                      'email': this.state.email, 
-                      'password': this.state.password
-                    }, LangApi.userApiLog).then(
+        email: this.state.email,
+        password: this.state.password,
+      }, LangApi.userApiLog).then(
         (loginData) => {
           sessionStorage.removeItem('auth');
           sessionStorage.setItem('auth', JSON.stringify(loginData));
           this.context.user.logIn(loginData.userId, loginData.token);
-          this.props.history.push("/profile");
+          this.props.history.push('/profile');
           window.location.reload();
           // console.log(sessionStorage);
         },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+        (error) => {
+          const resMessage = (error.response
+              && error.response.data
+              && error.response.data.message)
+            || error.message
+            || error.toString();
           console.log(resMessage);
           this.setState({
             loading: false,
-            message: 'Неверный email или пароль.'
+            message: 'Неверный email или пароль.',
           });
-        }
+        },
       );
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
   }
@@ -101,7 +99,7 @@ export default class Login extends Component {
 
           <Form history={this.props.history}
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -149,8 +147,8 @@ export default class Login extends Component {
               </div>
             )}
             <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
+              style={{ display: 'none' }}
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />

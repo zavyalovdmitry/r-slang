@@ -105,7 +105,7 @@ class App extends Component {
     hardWordVisible.action = this.changeHardWord;
     user.logIn = this.SetlogInUser;
     user.userWords = this.state.userWords;
-    user.cgangeUserWords = this.changeUserData;
+    user.changeUserWords = this.changeUserData;
 
     return (
     <SettingsContext.Provider

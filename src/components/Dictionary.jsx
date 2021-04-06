@@ -13,8 +13,10 @@ class Dictionary extends Component {
     this.state = {
       data: [],
       page: 0,
+      pages: 30,
       group: 0,
       section: 0,
+      refresh: false,
     };
   }
 
@@ -24,18 +26,36 @@ class Dictionary extends Component {
     this.changeGroupAndPage(this.props.page, this.props.group);
   }
 
-  changeGroupAndPage = (group = null, page = null) => {
+  changeGroupAndPage = (groupCh = null, pageCh = null) => {
     this.setState((state) => ({
-      page: (page !== null) ? page : state.page,
-      group: (group !== null) ? group : state.group,
+      page: (pageCh !== null) ? pageCh : state.page,
+      group: (groupCh !== null) ? groupCh : state.group,
     }),
-    () => LangApi.getWords(this.state.group, this.state.page)
-      .then((data) => data.json())
-      .then((words) => this.changeData(words)));
+    () => {
+      const { group, page, section } = this.state;
+      const { userId, token } = this.context.user;
+      const auth = (userId !== null && token !== null);
+      console.log(auth);
+      if (auth) {
+        LangApi.getUserWordsWithFilter(userId, token, section, group, page)
+          .then(
+            (words) => {
+              const { pages, data } = words;
+              console.log(pages);
+              console.log(data);
+              this.setState({ data, pages });
+            },
+          );
+      } else {
+        LangApi.getWords(group, page)
+          .then((data) => data.json())
+          .then((words) => this.changeData(words));
+      }
+    });
   }
 
   changeSection = (section) => {
-    this.setState({ section });
+    this.setState({ section }, () => this.changeGroupAndPage(0, 0));
   }
 
   changeData = (data) => {
@@ -45,19 +65,21 @@ class Dictionary extends Component {
   // status: false - del, true - hard
   changeWordStatus = (wordId, status) => {
     const { userId, token } = this.context.user;
-    LangApi.updateUserWords(userId, token, wordId, '', status)
-      .then(() => this.forceUpdate());
+    LangApi.updateUserWords(userId, token, wordId, null, status)
+      .then(() => this.context.user.changeUserWords())
+      .then(() => this.changeGroupAndPage);
   }
 
   render = () => {
-    const auth = (this.context.user.userId !== null && this.context.user.token !== null);
+    const { userId, token } = this.context.user;
+    const auth = (userId !== null && token !== null);
 
     // разделы словаря
     const sections = [
       { title: 'слова', value: 0 },
-      { title: 'изучаемые слова', value: 1 },
-      { title: 'сложные слова', value: 2 },
-      { title: 'удалённые слова', value: 3 },
+      { title: 'изучаемые слова', value: 1, difficulty: ['low', 'hard'] },
+      { title: 'сложные слова', value: 2, difficulty: ['hard'] },
+      { title: 'удалённые слова', value: 3, difficulty: ['del', 'success'] },
     ];
 
     const {
@@ -67,22 +89,16 @@ class Dictionary extends Component {
     // список выводимых слов
     let words;
     if (auth) {
-      const { userWords } = this.context.user;
       words = data.map((word) => {
-        const findedWord = userWords.find(
-          (userWord) => userWord.wordId === word.id,
-        );
-        let classStyle = null;
-        // проверка наличая пользовательского статуса для слова
-        if (findedWord !== undefined) {
-          const { difficulty } = findedWord;
-          if (difficulty === 'del') return null;
-          classStyle = difficulty;
-        }
-        return <DictionaryCell key={word.id}
+        const { difficulty } = word.userWord !== undefined ? word.userWord : { difficulty: null };
+        console.log(difficulty);
+        const classStyle = difficulty;
+        // eslint-disable-next-line no-underscore-dangle
+        return <DictionaryCell key={word._id}
                               data={word}
                               classStyle={classStyle}
-                              changeWordStatus = {this.changeWordStatus.bind(this, word.id) } />;
+                              // eslint-disable-next-line no-underscore-dangle
+                              changeWordStatus = {this.changeWordStatus.bind(this, word._id) } />;
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
@@ -104,6 +120,9 @@ class Dictionary extends Component {
               <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
               <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
+      <button onClick={ () => LangApi.groupCount(userId, token, 0, this.state.section) }>
+        query test
+      </button>
       </Fragment>
         : <Loader/>}
       </article>;
