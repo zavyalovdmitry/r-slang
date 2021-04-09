@@ -1162,3 +1162,60 @@ footer {
     margin-bottom: 20px;
   }
 }
+
+
+
+
+.game-constructor {
+  background-image: linear-gradient(to top, #4615b8 0%, #58be39 100%);
+}
+
+.game-constructor__alphBoard-btn {
+  margin: .34em;
+  font-size: 1.4em;
+
+  display: inline-block;
+  padding: .3em .7em;
+  color: #066c99;
+  border: 1px solid;
+  border-color: #ddd #ccc #ccc #ddd;
+  border-radius: 3px;
+  white-space: nowrap;
+  background-clip: padding-box;
+  cursor: pointer;
+
+  width: 3.5em;
+  // height: 5em;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+  text-transform: uppercase;
+
+  transition: 0.5s;
+}
+
+// .game-constructor__alphBoard-btn:hover{
+//   // font-size: 1.8em;
+//   background-color: #fff;
+//   transition: 0.5s;
+// }
+
+// .game-constructor__alphBoard-btn .outgame {
+.outgame {
+  color: gray;
+  background-color: #fff;
+}
+
+.game-constructor__alphBoard-btn .active {
+
+}
+
+.game-constructor__alphBoard-btn .used {
+
+}
+
+.game-constructor__alphBoard-btn .active:hover{
+  // font-size: 1.8em;
+  background-color: #fff;
+  transition: 0.5s;
+}

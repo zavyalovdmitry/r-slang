@@ -12,7 +12,7 @@ import Savanna from './Savanna';
 import Statisctics from './Statisctics';
 import Audiobattle from './Audiobattle';
 import Sprint from './Sprint';
-import Ourgame from './Ourgame';
+import Constructor from './Constructor';
 import Auth from './Auth';
 import SettingsContext from './SettingsContext';
 import LangApi from './LangApi';
@@ -135,8 +135,8 @@ class App extends Component {
         <Route path="/sprint">
           <Sprint/>
         </Route>
-        <Route path="/ourgame">
-          <Ourgame/>
+        <Route path="/constructor">
+          <Constructor/>
         </Route>
         <Route exact path="/register" component={Register}>
           {/* <Register/> */}

@@ -8,6 +8,10 @@ const MENU = [
     link: '/dictionary',
   },
   {
+    name: 'Спринт',
+    link: '/sprint',
+  },
+  {
     name: 'Саванна',
     link: '/savana',
   },
@@ -16,12 +20,8 @@ const MENU = [
     link: '/audiobattle',
   },
   {
-    name: 'Спринт',
-    link: '/sprint',
-  },
-  {
-    name: 'Своя игра',
-    link: '/ourgame',
+    name: 'Конструктор',
+    link: '/constructor',
   },
   {
     name: 'Статистика',
