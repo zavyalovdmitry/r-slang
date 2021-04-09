@@ -17,34 +17,35 @@ const GameBoardConstructor = ({
   const arrPages = arrPagesInGame;
   let timer;
 
-  const alphabet = [
-    {letter: 'A', status: 'outgame'},
-    {letter: 'B', status: 'outgame'},
-    {letter: 'C', status: 'outgame'},
-    {letter: 'D', status: 'outgame'},
-    {letter: 'E', status: 'outgame'},
-    {letter: 'F', status: 'outgame'},
-    {letter: 'G', status: 'outgame'},
-    {letter: 'H', status: 'outgame'},
-    {letter: 'I', status: 'outgame'},
-    {letter: 'J', status: 'outgame'},
-    {letter: 'K', status: 'outgame'},
-    {letter: 'L', status: 'outgame'},
-    {letter: 'M', status: 'outgame'},
-    {letter: 'N', status: 'outgame'},
-    {letter: 'O', status: 'outgame'},
-    {letter: 'P', status: 'outgame'},
-    {letter: 'Q', status: 'outgame'},
-    {letter: 'R', status: 'outgame'},
-    {letter: 'S', status: 'outgame'},
-    {letter: 'T', status: 'outgame'},
-    {letter: 'U', status: 'outgame'},
-    {letter: 'V', status: 'outgame'},
-    {letter: 'W', status: 'outgame'},
-    {letter: 'X', status: 'outgame'},
-    {letter: 'Y', status: 'outgame'},
-    {letter: 'Z', status: 'outgame'}
-  ];
+  const [currentUserWord, updateUserWord] = useState(listWord[currentWord].word.split('').map(() => '_'));
+  const [alphabet, changeLetterStatus] = useState([
+    {letter: 'a', status: 'outgame'},
+    {letter: 'b', status: 'outgame'},
+    {letter: 'c', status: 'outgame'},
+    {letter: 'd', status: 'outgame'},
+    {letter: 'e', status: 'outgame'},
+    {letter: 'f', status: 'outgame'},
+    {letter: 'g', status: 'outgame'},
+    {letter: 'h', status: 'outgame'},
+    {letter: 'i', status: 'outgame'},
+    {letter: 'j', status: 'outgame'},
+    {letter: 'k', status: 'outgame'},
+    {letter: 'l', status: 'outgame'},
+    {letter: 'm', status: 'outgame'},
+    {letter: 'n', status: 'outgame'},
+    {letter: 'o', status: 'outgame'},
+    {letter: 'p', status: 'outgame'},
+    {letter: 'q', status: 'outgame'},
+    {letter: 'r', status: 'outgame'},
+    {letter: 's', status: 'outgame'},
+    {letter: 't', status: 'outgame'},
+    {letter: 'u', status: 'outgame'},
+    {letter: 'v', status: 'outgame'},
+    {letter: 'w', status: 'outgame'},
+    {letter: 'x', status: 'outgame'},
+    {letter: 'y', status: 'outgame'},
+    {letter: 'z', status: 'outgame'}
+  ]);
 
   const alphabetBoard = () => {
     return(
@@ -52,7 +53,12 @@ const GameBoardConstructor = ({
       <>
       {/* {alphabet} */}
         {alphabet.map((el, i) => {
-            return(<span className={'game-constructor__alphBoard-btn ' + el.status} key={i}>
+            return(<span className={'game-constructor__alphBoard-btn ' + 
+                          (checkLetter(el.letter) ? 'active' : el.status)} 
+                          key={i} 
+                          // value={el.letter}
+                          onClick={(e) => addLetter(e, el.letter)}>
+              {/* {el.status === 'outgame' ? '' : el.letter} */}
               {el.letter}
             </span>
             )}
@@ -60,6 +66,37 @@ const GameBoardConstructor = ({
       </>
     )
   }
+
+const checkLetter = (letter) => {
+  return(
+          (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
+          (listWord[currentWord].word.split('').filter((el) => el === letter).length >
+          currentUserWord.filter((el) => el === letter).length)
+  );
+
+  // listWord[currentWord].word
+  // currentUserWord
+  
+  // .split('').includes(el.letter)
+}
+
+const addLetter = (e, letter) => {
+  let arr = currentUserWord;
+  arr[currentUserWord.indexOf('_')] = letter;
+  // console.log(e.target);
+  updateUserWord([...arr]);
+  // console.log(currentUserWord);
+}
+
+
+
+
+
+
+
+
+
+
 
   const getRandomIndex = () => {
     let indexWord = getRandomNumber(0, listWord.length - 1);
@@ -125,18 +162,19 @@ const GameBoardConstructor = ({
       <p className="game-sprint__points">{points}</p>
       <p className="game-sprint__plus">+{arrPages.length * 10} очков за слово</p>
       <div className="game-sprint__words-block">
-        <p className="game-sprint__translate">{listWord[indexTranslate].wordTranslate}</p>
+        {/* <p className="game-sprint__translate">{listWord[indexTranslate].wordTranslate}</p> */}
+        <p className="game-sprint__translate">{listWord[currentWord].wordTranslate}</p>
         <p className="game-sprint__equal">=</p>
-        <p className="game-sprint__word">{listWord[currentWord].word.split('').map((el) => '_ ')}</p>
+        <p className="game-sprint__word">{currentUserWord.map((el) => el + ' ')}</p>
       </div>
     </div>
     <div>
       {alphabetBoard()}
     </div>
-    {/* <div className="game-sprint__btn-block">
-      <button className="game-sprint__btn game-sprint__btn--wrong" onClick={(e) => getNextWord(e)} value={0}>не верно</button>
-      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)} value={1}>верно</button>
-    </div> */}
+    <div className="game-sprint__btn-block">
+      {/* <button className="game-sprint__btn game-sprint__btn--wrong" onClick={(e) => getNextWord(e)} value={0}>не верно</button> */}
+      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)} value={1}>дальше</button>
+    </div>
     <p className="timer">
       {time}
     </p>
