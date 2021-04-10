@@ -1202,14 +1202,14 @@ footer {
 // }
 
 // .game-constructor__alphBoard-btn .outgame {
-.outgame {
+.game-constructor__alphBoard-btn.outgame {
   color: gray;
   opacity:0.5;
   background-color: #fff;
 }
 
 // .game-constructor__alphBoard-btn 
-.active {
+.game-constructor__alphBoard-btn.active {
   color: black;
   // border-color: rgb(3, 230, 3);
   background-color: green;
@@ -1217,14 +1217,14 @@ footer {
 }
 
 // .game-constructor__alphBoard-btn 
-.used {
+.game-constructor__alphBoard-btn.used {
   color: gray;
   border-color: rgb(240, 10, 10);
   cursor: default;
 }
 
 // .game-constructor__alphBoard-btn 
-.active:hover{
+.game-constructor__alphBoard-btn.active:hover{
   // font-size: 1.8em;
   background-color: #fff;
   transition: 0.5s;
