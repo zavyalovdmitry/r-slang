@@ -15,17 +15,53 @@ class Dictionary extends Component {
       page: 0,
       pages: 30,
       group: 0,
+      groups: 6,
       section: 0,
-      refresh: false,
+      messag: null,
     };
   }
 
   static contextType = SettingsContext;
 
   componentDidMount = () => {
+    const { userId, token } = this.context.user;
+    if (userId !== null && token !== null) {
+      console.log('123');
+      this.quantityGroups();
+    }
     this.changeGroupAndPage(this.props.page, this.props.group);
   }
 
+  // подсчёт групп
+  quantityGroups = (group = 0, page = 0) => {
+    const { userId, token } = this.context.user;
+    LangApi.groupCount(userId, token, false, this.state.section)
+      .then(
+        (groups) => {
+          this.setState(() => ({ groups }), () => {
+            if (groups[group]) this.quantityPages(group, page);
+            else this.quantityPages(group.indexOf(true), 0);
+          });
+        },
+      );
+  }
+
+  // подсчёт страниц
+  quantityPages = (group, page) => {
+    const { userId, token } = this.context.user;
+    LangApi.groupCount(userId, token, group, this.state.section)
+      .then(
+        (pages) => {
+          this.setState(() => ({ pages }), () => {
+            console.log(pages);
+            if (pages[page]) this.changeGroupAndPage(group, page);
+            else this.changeGroupAndPage(group, page.indexOf(true));
+          });
+        },
+      );
+  }
+
+  // добавить обработчик страниц сюда
   changeGroupAndPage = (groupCh = null, pageCh = null) => {
     this.setState((state) => ({
       page: (pageCh !== null) ? pageCh : state.page,
@@ -35,15 +71,13 @@ class Dictionary extends Component {
       const { group, page, section } = this.state;
       const { userId, token } = this.context.user;
       const auth = (userId !== null && token !== null);
-      console.log(auth);
       if (auth) {
         LangApi.getUserWordsWithFilter(userId, token, section, group, page)
           .then(
             (words) => {
-              const { pages, data } = words;
-              console.log(pages);
-              console.log(data);
-              this.setState({ data, pages });
+              /* LangApi.groupCount(userId, token, 0, this.state.section); */
+              const { data } = words;
+              this.setState({ data });
             },
           );
       } else {
@@ -54,6 +88,7 @@ class Dictionary extends Component {
     });
   }
 
+  // добавить обработчик групп сюда
   changeSection = (section) => {
     this.setState({ section }, () => this.changeGroupAndPage(0, 0));
   }
@@ -66,8 +101,7 @@ class Dictionary extends Component {
   changeWordStatus = (wordId, status) => {
     const { userId, token } = this.context.user;
     LangApi.updateUserWords(userId, token, wordId, null, status)
-      .then(() => this.context.user.changeUserWords())
-      .then(() => this.changeGroupAndPage);
+      .then(() => this.changeGroupAndPage());
   }
 
   render = () => {
@@ -91,7 +125,6 @@ class Dictionary extends Component {
     if (auth) {
       words = data.map((word) => {
         const { difficulty } = word.userWord !== undefined ? word.userWord : { difficulty: null };
-        console.log(difficulty);
         const classStyle = difficulty;
         // eslint-disable-next-line no-underscore-dangle
         return <DictionaryCell key={word._id}
@@ -103,12 +136,15 @@ class Dictionary extends Component {
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
     return <article>
+    <button onClick={ this.quantityGroupAndPage }>
+        query test
+      </button>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
         {section === 0
         && <Fragment>
-              <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+              <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
               <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
         <div className="words-wrap">
@@ -117,12 +153,9 @@ class Dictionary extends Component {
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
         {section === 0
         && <Fragment>
-              <WordsNav quantity={6} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+              <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
               <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
-      <button onClick={ () => LangApi.groupCount(userId, token, 0, this.state.section) }>
-        query test
-      </button>
       </Fragment>
         : <Loader/>}
       </article>;

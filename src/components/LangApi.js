@@ -10,11 +10,19 @@ export default class LangApi {
     };
 
     static querys = [
-      '{"userWord.difficulty":{ "$not": {"$in": ["del","success"]}}}',
-      '{"userWord.difficulty": {"$in": ["hard","low"]}}',
-      '{"userWord.difficulty": {"$eq": "hard"}}',
-      '{"userWord.difficulty": {"$in": ["del","success"]}}',
+      '"userWord.difficulty":{ "$not": {"$in": ["del","success"]}}',
+      '"userWord.difficulty": {"$in": ["hard","low"]}',
+      '"userWord.difficulty": {"$eq": "hard"}',
+      '"userWord.difficulty": {"$in": ["del","success"]}',
     ];
+
+    static queryIn = (array) => `{"$in": [${array.join(',')}]}`;
+
+    static queryNot = (value) => `{ "$not": ${value}}`;
+
+    static queryEq = (value) => `{ "$eq": ${value}}`;
+
+    static queryAnd = (array) => `{"$and":[{${array.join(',')}}]}`
 
     static getWordById = (id, func) => {
       if (id !== null) {
@@ -76,10 +84,12 @@ export default class LangApi {
     static getUserWordsWithFilter = (userId, token, qry = 0, group = null, page = 0) => {
       // 0 - слова , 1- изучаемын, 2 - сложные,3 - удалённые
       const chosenGroup = group === null ? '' : `group=${group}&`;
+      console.log(this.queryAnd([this.querys[qry], `"page": ${this.queryEq(page)}`]));
+      const queryForPageOfAll = qry === 0;
+      const query = queryForPageOfAll ? encodeURIComponent(this.queryAnd([this.querys[qry], `"page": ${this.queryEq(page)}`])) : encodeURIComponent(`{${this.querys[qry]}}`);
+      const pageOfResult = queryForPageOfAll ? '' : `page=${page}&`;
 
-      const query = encodeURIComponent(this.querys[qry]);
-
-      const url = `${this.homeApi}users/${userId}/aggregatedWords?${chosenGroup}page=${page}&wordsPerPage=20&filter=${query}`;
+      const url = `${this.homeApi}users/${userId}/aggregatedWords?${chosenGroup}${pageOfResult}wordsPerPage=20&filter=${query}`;
       console.log(url);
       return fetch(url,
         {
@@ -93,7 +103,7 @@ export default class LangApi {
         .then((data) => data.json())
         .then((words) => {
           /* console.log(words[0]);
-          console.log(words[0].totalCount[0].count); // колличество таких элементов всего
+           console.log(words[0].totalCount[0].count); // колличество таких элементов всего
           console.log(words[0].paginatedResults); // массив значений */
           const pageCount = Math.ceil(words[0].totalCount[0].count / 20);
           const data = words[0].paginatedResults;
@@ -169,21 +179,11 @@ export default class LangApi {
         });
       })
 
-      /*static urlForSearchCount = (grExist, i, query) => {
-        let filter;
-        if (grExist) filter = encodeURIComponent(`{"$and":[${this.querys[query]}, {"page": ${i}}] `);
-        else filter= encodeURIComponent(this.querys[query]);
-        const url = `${this.homeApi}users/${userId}/aggregatedWords?${gr}${i}&wordsPerPage=1&filter=${query}`;
-      }*/
-
-      static groupCount = async (userId, token, group = null, qry = 0) => {
+      static groupCount = async (userId, token, group = false, qry = 0) => {
         const check = [];
-        const query = encodeURIComponent(this.querys[qry]);
-        const grExist = group !== null;
-        const gr = grExist ? `group=${group}&page=` : 'group=';
-        const max = grExist ? 30 : 6;
+        const max = group !== false ? 30 : 6;
         for (let i = 0; i < max; i += 1) {
-          const url = `${this.homeApi}users/${userId}/aggregatedWords?${gr}${i}&wordsPerPage=1&filter=${query}`;
+          const url = this.urlForSearchCount(userId, group, i, qry);
           check[i] = fetch(url,
             {
               method: 'GET',
@@ -195,7 +195,6 @@ export default class LangApi {
             })
             .then((data) => data.json())
             .then((words) => {
-              console.log(words);
               const pageCount = words[0].totalCount.length > 0 ? words[0].totalCount[0].count : 0;
               return pageCount > 0;
             });
@@ -203,5 +202,19 @@ export default class LangApi {
         const res = await Promise.all(check).then((values) => values);
         console.log(res);
         return res;
+      }
+
+      // for groupCount()
+      static urlForSearchCount = (userId, group, i, qry) => {
+        console.log(group);
+        let filter; let grQuery;
+        if (group !== false) {
+          filter = encodeURIComponent(`{"$and":[{${this.querys[qry]}}, {"page": ${i}}]}`);
+          grQuery = `group=${group}`;
+        } else {
+          filter = encodeURIComponent(`{${this.querys[qry]}}`);
+          grQuery = `group=${i}`;
+        }
+        return `${this.homeApi}users/${userId}/aggregatedWords?${grQuery}&wordsPerPage=1&filter=${filter}`;
       }
 }

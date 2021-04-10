@@ -13,9 +13,9 @@ import Statisctics from './Statisctics';
 import Audiobattle from './Audiobattle';
 import Sprint from './Sprint';
 import Ourgame from './Ourgame';
-import Auth from './Auth';
+/* import Auth from './Auth'; */
 import SettingsContext from './SettingsContext';
-import LangApi from './LangApi';
+/* import LangApi from './LangApi'; */
 import Register from './Register';
 import Login from './Login';
 import Profile from './Profile';
@@ -32,7 +32,7 @@ class App extends Component {
         userId: null,
         token: null,
       },
-      userWords: [],
+      /* userWords: [], */
     };
   }
 
@@ -80,20 +80,17 @@ class App extends Component {
   }
 
   SetlogInUser = (userId, token) => {
-    this.setState(() => ({ user: { userId, token } }),
-      () => {
-        this.changeUserData();
-      });
+    this.setState({ user: { userId, token } });
   }
 
-  changeUserData = () => {
+  /* changeUserData = () => {
     const { userId, token } = this.state.user;
     LangApi.getUserWords(userId, token)
       .then((data) => data.json())
       .then((userWords) => {
         this.setState({ userWords });
       });
-  }
+  } */
 
   render = () => {
     const {
@@ -104,8 +101,8 @@ class App extends Component {
     deleteWordVisible.action = this.changeDeleteWord;
     hardWordVisible.action = this.changeHardWord;
     user.logIn = this.SetlogInUser;
-    user.userWords = this.state.userWords;
-    user.changeUserWords = this.changeUserData;
+    /* user.userWords = this.state.userWords;
+    user.changeUserWords = this.changeUserData; */
 
     return (
     <SettingsContext.Provider
@@ -146,7 +143,7 @@ class App extends Component {
         </Route>
         <Route exact path="/profile" component={Profile}>
           {/* <Profile/> */}
-        </Route>  
+        </Route>
         <Route path="/main">
           <Main/>
         </Route>
