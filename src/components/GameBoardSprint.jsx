@@ -1,9 +1,10 @@
 import React, {
-  useState, useEffect,
+  useState, useEffect, useContext,
 } from 'react';
 import { PropTypes } from 'prop-types';
 import { getRandomNumber } from '../utils';
 import LangApi from './LangApi';
+import SettingsContext from './SettingsContext';
 
 const GameBoardSprint = ({
   dataListWords, setFinish, setResult, arrPagesInGame, difficult,
@@ -15,7 +16,15 @@ const GameBoardSprint = ({
   const [points, setPointsValue] = useState(0);
   const listWord = dataListWords;
   const arrPages = arrPagesInGame;
+  const context = useContext(SettingsContext);
   let timer;
+
+  const changeStatistics = (action) => {
+    if (context.user.userId) {
+      LangApi.updateUserWords(context.user.userId,
+        context.user.token, listWord[currentWord].id, action);
+    }
+  };
 
   const getRandomIndex = () => {
     let indexWord = getRandomNumber(0, listWord.length - 1);
@@ -29,6 +38,9 @@ const GameBoardSprint = ({
     if ((indexTranslate === currentWord) === !!value) {
       setPointsValue(points + arrPages.length * 10);
       changeRightAnswer(result + 1);
+      changeStatistics(true);
+    } else {
+      changeStatistics(false);
     }
   };
 

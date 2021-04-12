@@ -1,5 +1,5 @@
 import React, {
-  useState, Fragment, useEffect, useRef,
+  useState, Fragment, useEffect, useRef, useContext,
 } from 'react';
 import { PropTypes } from 'prop-types';
 import {
@@ -7,6 +7,8 @@ import {
 } from '../utils';
 import sound from '../assets/image/sound.png';
 import arrow from '../assets/image/next-arrow.png';
+import SettingsContext from './SettingsContext';
+import LangApi from './LangApi';
 
 const GameBoardAudiobattle = ({
   dataListWords, setFinish, setResult,
@@ -16,7 +18,15 @@ const GameBoardAudiobattle = ({
   const [listWords] = useState(dataListWords);
   const [isChoose, changeConditionChoose] = useState(false);
   const variantsBlock = useRef(null);
+  const context = useContext(SettingsContext);
   listWords[0].wasInGame = true;
+
+  const changeStatistics = (action) => {
+    if (context.user.userId) {
+      LangApi.updateUserWords(context.user.userId,
+        context.user.token, listWords[currentWord].id, action);
+    }
+  };
 
   const getVariants = () => {
     const variantsList = new Set([currentWord]);
@@ -58,9 +68,11 @@ const GameBoardAudiobattle = ({
 
   const userChoise = (e, index) => {
     if (index === currentWord) {
+      changeStatistics(true);
       e.target.classList.add('right');
       changeRightAnswers(rightAnswers + 1);
     } else {
+      changeStatistics(false);
       e.target.classList.add('wrong');
     }
     changeConditionChoose(true);

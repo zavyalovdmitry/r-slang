@@ -1,9 +1,11 @@
 import React, {
-  useState, Fragment, useRef, useEffect,
+  useState, Fragment, useRef, useEffect, useContext,
 } from 'react';
 import { PropTypes } from 'prop-types';
 import LifesIndicator from './LifesIndicator';
 import { getRandomNumber, shuffleArray } from '../utils';
+import SettingsContext from './SettingsContext';
+import LangApi from './LangApi';
 
 const GameBoardSavanna = ({
   life, dataListWords, changeLife, setFinish, setResult,
@@ -13,6 +15,7 @@ const GameBoardSavanna = ({
   const wordElement = useRef(null);
   const variantsBlock = useRef(null);
   const [listWords] = useState(dataListWords);
+  const context = useContext(SettingsContext);
   let idInterval;
   listWords[0].wasInGame = true;
   const getNextWord = () => {
@@ -23,6 +26,13 @@ const GameBoardSavanna = ({
       }
     }
     setFinish(true);
+  };
+
+  const changeStatistics = (action) => {
+    if (context.user.userId) {
+      LangApi.updateUserWords(context.user.userId,
+        context.user.token, listWords[currentWord].id, action);
+    }
   };
 
   const changeList = () => {
@@ -50,7 +60,9 @@ const GameBoardSavanna = ({
   const userChoise = (index) => {
     if (index !== currentWord) {
       changeLife(life - 1);
+      changeStatistics(false);
     } else {
+      changeStatistics(true);
       changeRightAnswers(rightAnswers + 1);
       setResult(rightAnswers);
     }
