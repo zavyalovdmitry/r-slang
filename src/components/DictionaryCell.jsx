@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LangApi from './LangApi';
 import audioIMG from '../assets/image/audio.svg';
@@ -50,15 +50,17 @@ export default class DictionaryCell extends Component {
             {textTranslateVisible.value && <p className='word'>{textExampleTranslate}</p>}
           </div>
         </div>
-        {
+        <div className="word-item__right-block">
+             <p className='word-item__status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
+             {
               action !== false
-              && <Fragment>
-                    {hardWordVisible.value && <button onClick={() => action(true)}>hard</button>}
+              && <div className="word-item__btn-block">
+                    {hardWordVisible.value && <button className="word-item__btn" onClick={() => action(true)}>hard</button>}
                     { // eslint-disable-next-line max-len
-                      deleteWordVisible.value && <button onClick={() => action(false)}> delete</button>}
-                </Fragment>
+                      deleteWordVisible.value && <button className="word-item__btn" onClick={() => action(false)}> delete</button>}
+                </div>
             }
-             <p className='status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
+             </div>
       </div>
     );
   }
