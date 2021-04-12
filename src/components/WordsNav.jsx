@@ -12,10 +12,14 @@ export default function WordsNav(props) {
       },
     );
   } else if (props.quantity !== undefined) {
-    arr = new Array(props.quantity).fill(0);
-    points = arr.map(
-      (_val, index) => <li className={`nav-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>,
-    );
+    const { quantity } = props;
+    const func = (_val, index) => <li className={`nav-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>;
+    if (Array.isArray(quantity)) {
+      points = (quantity.filter((elem) => elem)).map(func);
+    } else {
+      arr = new Array(props.quantity).fill(0);
+      points = arr.map(func);
+    }
   }
 
   return (
@@ -26,7 +30,7 @@ export default function WordsNav(props) {
 }
 
 WordsNav.propTypes = {
-  quantity: PropTypes.number,
+  quantity: (PropTypes.number || PropTypes.array),
   changeVal: PropTypes.func.isRequired,
   classString: PropTypes.string,
   active: PropTypes.number.isRequired,

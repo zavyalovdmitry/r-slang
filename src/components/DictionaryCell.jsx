@@ -16,7 +16,7 @@ export default class DictionaryCell extends Component {
     const action = this.props.changeWordStatus !== undefined ? this.props.changeWordStatus : false;
 
     const {
-      wordTranslateVisible, textTranslateVisible, /* deleteWordVisible, hardWordVisible, */
+      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
     } = this.context;
 
     const playAudio = (audioName) => {
@@ -53,8 +53,9 @@ export default class DictionaryCell extends Component {
         {
               action !== false
               && <Fragment>
-                    <button onClick={() => action(true)}>hard</button>
-                    <button onClick={() => action(false)}> delete</button>
+                    {hardWordVisible.value && <button onClick={() => action(true)}>hard</button>}
+                    { // eslint-disable-next-line max-len
+                      deleteWordVisible.value && <button onClick={() => action(false)}> delete</button>}
                 </Fragment>
             }
              <p className='status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
