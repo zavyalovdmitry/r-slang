@@ -1,6 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import restartIcon from '../assets/image/restart.png';
+import right from '../assets/image/right.png';
+import wrong from '../assets/image/wrong.png';
 
 const PopupFinishGame = ({
   result, restart, wordsInGame, points, pointsSeries, listWord
@@ -13,7 +15,8 @@ const PopupFinishGame = ({
   <p className="finish-result">{result}/{wordsInGame || 20}</p>
   {pointsSeries.map((el, i) => 
     // <p key={i}>{listWord[i].word}:{el ? '&#10004;' : '&#10006;'}</p>
-    <p key={i}>{listWord[i].word}{' : '}{el ? 'верно' : 'неверно'}</p>
+    <p key={i}><img src={el ? right : wrong} width='25'></img>{' '}{listWord[i].word}{' = '}{listWord[i].wordTranslate}</p>
+
   )}
   </div>;
 

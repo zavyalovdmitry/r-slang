@@ -7,6 +7,10 @@ const GameSavanna = ({ dataListWords }) => {
   const [life, changeLife] = useState(5);
   const [isFinish, setFinish] = useState(false);
   const [result, setResult] = useState(0);
+
+  const [pointsSeries, updatePointsSeries] = useState([]);
+  const [listWord, setListWord] = useState([]);
+
   let listWords = JSON.parse(JSON.stringify(dataListWords));
   const restart = () => {
     setFinish(false);

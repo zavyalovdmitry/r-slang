@@ -86,7 +86,7 @@ const GameBoardConstructor = ({
     } else {
       changeStatistics(false);
     }
-    updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')])
+    updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')]);
     console.log(listWord[currentWord].word);
     console.log(currentUserWord.join(''));
     console.log(pointsSeries);

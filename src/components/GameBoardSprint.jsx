@@ -18,6 +18,7 @@ const GameBoardSprint = ({
   const arrPages = arrPagesInGame;
   const context = useContext(SettingsContext);
   let timer;
+  const [pointsSeries, updatePointsSeries] = useState([]);
 
   const changeStatistics = (action) => {
     if (context.user.userId) {
@@ -39,8 +40,10 @@ const GameBoardSprint = ({
       setPointsValue(points + arrPages.length * 10);
       changeRightAnswer(result + 1);
       changeStatistics(true);
+      updatePointsSeries([...pointsSeries, true]);
     } else {
       changeStatistics(false);
+      updatePointsSeries([...pointsSeries, false]);
     }
   };
 
@@ -78,7 +81,7 @@ const GameBoardSprint = ({
 
   useEffect(() => {
     if (time === 0) {
-      setResult(currentWord, result, points);
+      setResult(currentWord, result, points, pointsSeries, listWord);
       setFinish(true);
     }
   }, [time]);
