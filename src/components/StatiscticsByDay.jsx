@@ -1,96 +1,128 @@
-import React from 'react';
+import React, {
+   useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import Dropdown from 'react-bootstrap/Dropdown';
+import SplitButton from 'react-bootstrap/SplitButton';
 import STATS from '../testData';
 
-const formatDataByDays = (stats, date, keyParam) => {
+const getDates = (stats) => {
    let output = [];
-   for (let key in stats.optional[date]) {
-      // output.push({x: key, y: stats.optional[key].learnedWords})
-      output.push(stats.optional[date][key][keyParam])
+   for (let key in stats.optional) {
+      output.push(key)
    };
-   output.splice(0, 1);
-   output.push(stats.optional[date][keyParam]);
    return output;
 }
 
-const getPercents = () => {
-   let outputs = formatDataByDays(STATS, date, 'outputsWords');
-   let trues = formatDataByDays(STATS, date, 'trues');
-   let res = [];
+const dates = getDates(STATS);
 
-   outputs.splice(-1, 1);
-   trues.splice(-1, 1);
-
-   outputs.push(outputs.reduce((a, b) => a + b, 0));
-   trues.push(trues.reduce((a, b) => a + b, 0));
-
-   for (let i = 0; i < trues.length; i++) {
-      res.push(Math.ceil(100 * trues[i] / outputs[i]));
+const StatiscticsByDay = () => {
+   const [date, setDate] = useState(dates[dates.length - 1]);
+      
+   const formatDataByDays = (stats, date, keyParam) => {
+      let output = [];
+      for (let key in stats.optional[date]) {
+         output.push(stats.optional[date][key][keyParam])
+      };
+      output.splice(0, 1);
+      output.push(stats.optional[date][keyParam]);
+      return output;
    }
-   return(res);
-}
 
-const getMaxes = () => {
-   let serries = formatDataByDays(STATS, date, 'serries');
+   const getPercents = () => {
+      let outputs = formatDataByDays(STATS, date, 'outputsWords');
+      let trues = formatDataByDays(STATS, date, 'trues');
+      let res = [];
 
-   serries.splice(-1, 1);
+      outputs.splice(-1, 1);
+      trues.splice(-1, 1);
 
-   serries.push(Math.max(...serries));
+      outputs.push(outputs.reduce((a, b) => a + b, 0));
+      trues.push(trues.reduce((a, b) => a + b, 0));
 
-   return(serries);
-}
+      for (let i = 0; i < trues.length; i++) {
+         res.push(Math.ceil(100 * trues[i] / outputs[i]));
+      }
+      return(res);
+   }
 
-const date = '2020-01-01';
+   const getMaxes = () => {
+      let serries = formatDataByDays(STATS, date, 'serries');
 
-const StatiscticsByDay = () => (
- <article>
-   За {date}
-   
-   <Table striped bordered hover>
-      <thead>
-         <tr>
-            <th></th>
-            <th>Спринт</th>
-            <th>Саванна</th>
-            <th>Аудиовызов</th>
-            <th>Конструктор</th>
-            <th>Всего</th>
-         </tr>
-      </thead>
-      <tbody>
-         <tr>
-            <td>Изучено слов</td>
-            {formatDataByDays(STATS, date, 'learnedWords').map((el, key) => {
+      serries.splice(-1, 1);
+
+      serries.push(Math.max(...serries));
+
+      return(serries);
+   }
+
+   return(
+      <article>
+         За 
+         <SplitButton
+            id={`dropdown-split-variants-Secondary`}
+            variant='Secondary'
+            title={date}
+         >
+            {dates.map((el) => {
                return(
-                  <td key={key}>
-                     {el}{' шт.'}
-                  </td>
+                  <Dropdown.Item 
+                     key={el}
+                     eventKey={el} 
+                     onSelect={(eventKey) => {
+                        setDate(eventKey);
+                     }}>
+                        {el}
+                  </Dropdown.Item>
                )
             })}
-         </tr>
-         <tr>
-            <td>Верных ответов</td>
-            {getPercents().map((el, key) => {
-               return(
-                  <td key={key}>
-                     {el}{'%'}
-                  </td>
-               )
-            })}
-         </tr>
-         <tr>
-            <td>Максимальная серия</td>
-            {getMaxes().map((el, key) => {
-               return(
-                  <td key={key}>
-                     {el}{' шт.'}
-                  </td>
-               )
-            })}
-         </tr>
-      </tbody>
-   </Table>
- </article>
-);
+         </SplitButton>
+
+         <Table striped bordered hover>
+            <thead>
+               <tr>
+                  <th></th>
+                  <th>Спринт</th>
+                  <th>Саванна</th>
+                  <th>Аудиовызов</th>
+                  <th>Конструктор</th>
+                  <th>Всего</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Изучено слов</td>
+                  {formatDataByDays(STATS, date, 'learnedWords').map((el, key) => {
+                     return(
+                        <td key={key}>
+                           {el}{' шт.'}
+                        </td>
+                     )
+                  })}
+               </tr>
+               <tr>
+                  <td>Верных ответов</td>
+                  {getPercents().map((el, key) => {
+                     return(
+                        <td key={key}>
+                           {el}{'%'}
+                        </td>
+                     )
+                  })}
+               </tr>
+               <tr>
+                  <td>Максимальная серия</td>
+                  {getMaxes().map((el, key) => {
+                     return(
+                        <td key={key}>
+                           {el}{' шт.'}
+                        </td>
+                     )
+                  })}
+               </tr>
+            </tbody>
+         </Table>
+      </article>
+   )
+};
 
 export default StatiscticsByDay;

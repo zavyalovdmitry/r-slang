@@ -13,11 +13,11 @@ const PopupFinishGame = ({
     <img src={restartIcon} alt=""/>
   </button>
   <p className="finish-result">{result}/{wordsInGame || 20}</p>
-  {pointsSeries.map((el, i) => 
+  {pointsSeries !== undefined ? pointsSeries.map((el, i) => 
     // <p key={i}>{listWord[i].word}:{el ? '&#10004;' : '&#10006;'}</p>
     <p key={i}><img src={el ? right : wrong} width='25'></img>{' '}{listWord[i].word}{' = '}{listWord[i].wordTranslate}</p>
 
-  )}
+  ) : ''}
   </div>;
 
 PopupFinishGame.propTypes = {
