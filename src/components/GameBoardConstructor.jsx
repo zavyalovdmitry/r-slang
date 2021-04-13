@@ -1,8 +1,9 @@
 import React, {
-  useState, useEffect,
+  useState, useEffect, useContext
 } from 'react';
 import { PropTypes } from 'prop-types';
 import { getRandomNumber } from '../utils';
+import SettingsContext from './SettingsContext';
 import LangApi from './LangApi';
 
 const GameBoardConstructor = ({
@@ -13,7 +14,7 @@ const GameBoardConstructor = ({
   const [result, changeRightAnswer] = useState(0);
   const [indexTranslate, setIndexTranslate] = useState(0);
   const [points, setPointsValue] = useState(0);
-
+  const context = useContext(SettingsContext);
   const [pointsSeries, updatePointsSeries] = useState([]);
 
   const listWord = dataListWords;
@@ -40,6 +41,16 @@ const GameBoardConstructor = ({
       </>
     )
   }
+
+  const changeStatistics = (action) => {
+    if (context.user.userId) {
+      LangApi.updateUserWords(context.user.userId,
+        context.user.token, listWord[currentWord].id, action, null, 'game-4');
+    }
+  };
+
+  // updateUserWords(userId, token, wordId, action,null, game)
+  // https://react-rs-lang.herokuapp.com/users/60670ff786026c0015804864/words/5e9f5ee35eb9e72bc21af6e8
 
   const checkLetter = (letter) => {
     return(
@@ -71,6 +82,9 @@ const GameBoardConstructor = ({
     if (listWord[currentWord].word === currentUserWord.join('')) {
       setPointsValue(points + arrPages.length * 10);
       changeRightAnswer(result + 1);
+      changeStatistics(true);
+    } else {
+      changeStatistics(false);
     }
     updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')])
     console.log(listWord[currentWord].word);

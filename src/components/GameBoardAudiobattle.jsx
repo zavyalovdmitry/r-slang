@@ -24,7 +24,7 @@ const GameBoardAudiobattle = ({
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
-        context.user.token, listWords[currentWord].id, action);
+        context.user.token, listWords[currentWord].id, action, null, 'game-3');
     }
   };
 

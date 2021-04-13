@@ -22,7 +22,7 @@ const GameBoardSprint = ({
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
-        context.user.token, listWord[currentWord].id, action);
+        context.user.token, listWord[currentWord].id, action, null, 'game-1');
     }
   };
 

@@ -66,7 +66,8 @@
     "react-validation": "^3.0.7",
     "react-yandex-maps": "^4.6.0",
     "swiper": "^6.5.0",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "victory": "^35.5.1"
   },
   "babel": {
     "presets": [
