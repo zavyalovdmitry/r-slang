@@ -16,7 +16,8 @@ export default class Profile extends Component {
   static contextType = SettingsContext;
 
   logOut = () => {
-    sessionStorage.removeItem('auth');
+    sessionStorage.clear();
+    // sessionStorage.removeItem('auth');
     this.props.history.push("/");
     window.location.reload();
   }

@@ -13,6 +13,9 @@ const GameBoardConstructor = ({
   const [result, changeRightAnswer] = useState(0);
   const [indexTranslate, setIndexTranslate] = useState(0);
   const [points, setPointsValue] = useState(0);
+
+  const [pointsSeries, updatePointsSeries] = useState([]);
+
   const listWord = dataListWords;
   const arrPages = arrPagesInGame;
   let timer;
@@ -69,8 +72,10 @@ const GameBoardConstructor = ({
       setPointsValue(points + arrPages.length * 10);
       changeRightAnswer(result + 1);
     }
+    updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')])
     console.log(listWord[currentWord].word);
     console.log(currentUserWord.join(''));
+    console.log(pointsSeries);
   };
 
   const getNextWord = (e) => {
@@ -107,7 +112,7 @@ const GameBoardConstructor = ({
 
   useEffect(() => {
     if (time === 0) {
-      setResult(currentWord, result, points);
+      setResult(currentWord, result, points, pointsSeries, listWord);
       setFinish(true);
     }
   }, [time]);
