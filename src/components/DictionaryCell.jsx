@@ -13,8 +13,22 @@ export default class DictionaryCell extends Component {
       // eslint-disable-next-line max-len
       id, _id, word, image, audioMeaning, audio, audioExample, textMeaning, textExample, transcription, wordTranslate, textMeaningTranslate, textExampleTranslate,
     } = this.props.data;
-    const action = this.props.changeWordStatus !== undefined ? this.props.changeWordStatus : false;
+    let global = 0;
+    let series = 0;
+    let wrong = 0;
+    let conditionDifficulty = false;
+    let difficulty = '';
+    if (this.props.data.userWord !== undefined) {
+      difficulty = this.props.data.userWord.difficulty;
+      conditionDifficulty = ['success', 'del'].includes(difficulty);
+      if (!conditionDifficulty) {
+        global = this.props.data.userWord.optional.global;
+        series = this.props.data.userWord.optional.series;
+        wrong = this.props.data.userWord.optional.wrong;
+      }
+    }
 
+    const action = this.props.changeWordStatus !== undefined ? this.props.changeWordStatus : false;
     const {
       wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
     } = this.context;
@@ -51,13 +65,24 @@ export default class DictionaryCell extends Component {
           </div>
         </div>
         <div className="word-item__right-block">
-             <p className='word-item__status'><span>Участвовало в игре: 0</span><span>Ошибок: 0</span><span>Текущая безошибочная череда: 0</span></p>
+            {
+              !conditionDifficulty
+              && <p className='word-item__status'>
+             <span>Участвовало в игре: {global}</span>
+             <span>Ошибок: {wrong}</span>
+             <span>Текущая безошибочная череда: {series}</span>
+             </p>
+            }
              {
               action !== false
               && <div className="word-item__btn-block">
-                    {hardWordVisible.value && <button className="word-item__btn" onClick={() => action(true)}>hard</button>}
+                    {hardWordVisible.value && <button className="word-item__btn" onClick={() => action(false)}>
+                    { difficulty === 'hard' ? 'easy' : 'hard' }
+                    </button>}
                     { // eslint-disable-next-line max-len
-                      deleteWordVisible.value && <button className="word-item__btn" onClick={() => action(false)}> delete</button>}
+                      deleteWordVisible.value && <button className="word-item__btn" onClick={() => action(true)}>
+                      { difficulty === 'del' ? 'return' : 'delete' }
+                      </button>}
                 </div>
             }
              </div>

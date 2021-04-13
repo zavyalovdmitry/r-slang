@@ -13,11 +13,14 @@ export default function WordsNav(props) {
     );
   } else if (props.quantity !== undefined) {
     const { quantity } = props;
-    const func = (_val, index) => <li className={`nav-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>;
+    const func = (val, index) => {
+      if (val) return <li className={`nav-item${active === index ? ' active' : ''}` } key={index} onClick={() => changeVal(index)}>{index + 1}</li>;
+      return false;
+    };
     if (Array.isArray(quantity)) {
-      points = (quantity.filter((elem) => elem)).map(func);
+      points = (quantity.map(func)).filter((elem) => elem);
     } else {
-      arr = new Array(props.quantity).fill(0);
+      arr = new Array(props.quantity).fill(true);
       points = arr.map(func);
     }
   }

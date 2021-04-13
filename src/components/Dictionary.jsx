@@ -8,8 +8,8 @@ import SettingsContext from './SettingsContext';
 import Loader from './Loader';
 
 class Dictionary extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       data: [],
       page: 0,
@@ -26,7 +26,6 @@ class Dictionary extends Component {
   componentDidMount = () => {
     const { userId, token } = this.context.user;
     if (userId !== null && token !== null) {
-      console.log('123');
       this.quantityGroups();
     }
     this.changeGroupAndPage(this.props.page, this.props.group);
@@ -38,22 +37,19 @@ class Dictionary extends Component {
     LangApi.groupCount(userId, token, false, this.state.section)
       .then(
         (groups) => {
-          this.setState(() => ({ groups }), () => {
-            if (groups[group]) this.quantityPages(group, page);
-            else this.quantityPages(group.indexOf(true), 0);
-          });
+          if (groups[group]) this.quantityPages(group, page, groups);
+          else this.quantityPages(group.indexOf(true), 0, groups);
         },
       );
   }
 
   // подсчёт страниц
-  quantityPages = (group, page) => {
+  quantityPages = (group, page, groups) => {
     const { userId, token } = this.context.user;
     LangApi.groupCount(userId, token, group, this.state.section)
       .then(
         (pages) => {
-          this.setState(() => ({ pages }), () => {
-            console.log(pages);
+          this.setState(() => ({ pages, groups, data: [] }), () => {
             if (pages[page]) this.changeGroupAndPage(group, page);
             else this.changeGroupAndPage(group, page.indexOf(true));
           });
@@ -63,34 +59,32 @@ class Dictionary extends Component {
 
   // добавить обработчик страниц сюда
   changeGroupAndPage = (groupCh = null, pageCh = null) => {
-    this.setState((state) => ({
-      page: (pageCh !== null) ? pageCh : state.page,
-      group: (groupCh !== null) ? groupCh : state.group,
-    }),
-    () => {
-      const { group, page, section } = this.state;
-      const { userId, token } = this.context.user;
-      const auth = (userId !== null && token !== null);
-      if (auth) {
-        LangApi.getUserWordsWithFilter(userId, token, section, group, page)
-          .then(
-            (words) => {
-              /* LangApi.groupCount(userId, token, 0, this.state.section); */
-              const { data } = words;
-              this.setState({ data });
-            },
-          );
-      } else {
-        LangApi.getWords(group, page)
-          .then((data) => data.json())
-          .then((words) => this.changeData(words));
-      }
-    });
+    const page = (pageCh !== null) ? pageCh : this.state.page;
+    const group = (groupCh !== null) ? groupCh : this.state.group;
+    const { section } = this.state;
+    const { userId, token } = this.context.user;
+    const auth = (userId !== null && token !== null);
+    if (auth) {
+      LangApi.getUserWordsWithFilter(userId, token, section, group, page)
+        .then(
+          (words) => {
+            /* LangApi.groupCount(userId, token, 0, this.state.section); */
+            const { data } = words;
+            this.setState({ data, page, group });
+          },
+        );
+    } else {
+      LangApi.getWords(group, page)
+        .then((words) => words.json())
+        .then((data) => this.setState({ data, page, group }));
+    }
   }
 
   // добавить обработчик групп сюда
   changeSection = (section) => {
-    this.setState({ section }, () => this.changeGroupAndPage(0, 0));
+    this.setState({
+      section, groups: 0, pages: 0, data: [],
+    }, () => this.quantityGroups(0, 0));
   }
 
   changeData = (data) => {
@@ -137,24 +131,30 @@ class Dictionary extends Component {
 
     return <article>
     <button onClick={ this.quantityGroupAndPage }>
-        query test
+        quantityGroupAndPage test
+      </button>
+      <button onClick={
+        // eslint-disable-next-line max-len
+        () => LangApi.updateGameStatistic(userId, token, 'game-1', [false, true, true, true, true, false, true])
+        }>
+      updateGameStatistic test
       </button>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
-        {section === 0
+        {section < 6
         && <Fragment>
               <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
-              <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+              <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
         <div className="words-wrap">
           {words}
         </div>
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
-        {section === 0
+        {section < 6
         && <Fragment>
               <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
-              <WordsNav quantity={30} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+              <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
       </Fragment>
         : <Loader/>}
