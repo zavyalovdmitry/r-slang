@@ -1,8 +1,9 @@
 import React, {
-  useState, useEffect,
+  useState, useEffect, useContext
 } from 'react';
 import { PropTypes } from 'prop-types';
 import { getRandomNumber } from '../utils';
+import SettingsContext from './SettingsContext';
 import LangApi from './LangApi';
 
 const GameBoardConstructor = ({
@@ -13,11 +14,14 @@ const GameBoardConstructor = ({
   const [result, changeRightAnswer] = useState(0);
   const [indexTranslate, setIndexTranslate] = useState(0);
   const [points, setPointsValue] = useState(0);
+  const context = useContext(SettingsContext);
+  const [pointsSeries, updatePointsSeries] = useState([]);
+
   const listWord = dataListWords;
   const arrPages = arrPagesInGame;
   let timer;
 
-  const [currentUserWord, updateUserWord] = useState(['']);
+  const [currentUserWord, updateUserWord] = useState(['_']);
   const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g' ,'h', 'i', 'j', 'k', 'l',
                     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
@@ -38,6 +42,19 @@ const GameBoardConstructor = ({
     )
   }
 
+  useEffect(() => {
+    document.addEventListener('keydown', 
+      (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
+    );
+  }, []);
+
+  const changeStatistics = (action) => {
+    if (context.user.userId) {
+      LangApi.updateUserWords(context.user.userId,
+        context.user.token, listWord[currentWord].id, action, null, 'game-4');
+    }
+  };
+
   const checkLetter = (letter) => {
     return(
             (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
@@ -50,6 +67,7 @@ const GameBoardConstructor = ({
     let arr = currentUserWord;
     arr[currentUserWord.indexOf('_')] = letter;
     updateUserWord([...arr]);
+    console.log(currentUserWord);
   }
 
   useEffect(() => {
@@ -68,10 +86,21 @@ const GameBoardConstructor = ({
     if (listWord[currentWord].word === currentUserWord.join('')) {
       setPointsValue(points + arrPages.length * 10);
       changeRightAnswer(result + 1);
+      changeStatistics(true);
+    } else {
+      changeStatistics(false);
     }
+    updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')]);
     console.log(listWord[currentWord].word);
     console.log(currentUserWord.join(''));
+    console.log(pointsSeries);
   };
+
+  const delLetter = (e) => {
+    let arr = currentUserWord;
+    arr[currentUserWord.indexOf('_') - 1] = '_';
+    updateUserWord([...arr]);
+  }
 
   const getNextWord = (e) => {
     if (currentWord % 10 === 0 && currentWord !== 0) {
@@ -107,7 +136,7 @@ const GameBoardConstructor = ({
 
   useEffect(() => {
     if (time === 0) {
-      setResult(currentWord, result, points);
+      setResult(currentWord, result, points, pointsSeries, listWord);
       setFinish(true);
     }
   }, [time]);
@@ -131,7 +160,8 @@ const GameBoardConstructor = ({
       {alphabetBoard()}
     </div>
     <div className="game-sprint__btn-block">
-      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)}>дальше</button>
+      <button className="game-sprint__btn game-sprint__btn--wrong" onClick={(e) => delLetter(e)}>{'удалить букву'}</button>
+      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)}>{'следующее слово'}</button>
     </div>
     <p className="timer">
       {time}

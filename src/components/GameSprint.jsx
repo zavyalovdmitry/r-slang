@@ -11,6 +11,10 @@ const GameSprint = ({ dataListWords, difficult }) => {
   const [result, setResult] = useState(0);
   const [wordsInGame, setWordsInGame] = useState(0);
   const [points, setPointsValue] = useState(0);
+
+  const [pointsSeries, updatePointsSeries] = useState([]);
+  const [listWord, setListWord] = useState([]);
+
   let listWords = JSON.parse(JSON.stringify(dataListWords));
   const [arrPagesInGame, changeArrPages] = useState([listWords[0].page]);
 
@@ -26,10 +30,12 @@ const GameSprint = ({ dataListWords, difficult }) => {
       });
   };
 
-  const setResultSprint = (words, rightAnswers, pointsGame) => {
+  const setResultSprint = (words, rightAnswers, pointsGame, pointsSeries, listWord) => {
     setResult(rightAnswers);
     setWordsInGame(words);
     setPointsValue(pointsGame);
+    updatePointsSeries(pointsSeries);
+    setListWord(listWord);
   };
 
   const setContent = () => {
@@ -48,7 +54,9 @@ const GameSprint = ({ dataListWords, difficult }) => {
     wordsInGame={wordsInGame}
     result={result}
     restart={restart}
-    points={points}/>;
+    points={points}
+    pointsSeries={pointsSeries}
+    listWord={listWord}/>;
   };
 
   return <article className="h100 game game-sprint">

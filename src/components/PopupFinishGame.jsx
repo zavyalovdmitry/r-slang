@@ -1,16 +1,23 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import restartIcon from '../assets/image/restart.png';
+import right from '../assets/image/right.png';
+import wrong from '../assets/image/wrong.png';
 
 const PopupFinishGame = ({
-  result, restart, wordsInGame, points,
+  result, restart, wordsInGame, points, pointsSeries, listWord
 }) => <div className="finish-block">
-  <h2 className="finish-title">Finish</h2>
+  <h2 className="finish-title">Игра окончена</h2>
   {points > -1 ? <p className="finish-point">{points} очков</p> : null}
-  <p className="finish-result">{result}/{wordsInGame || 20}</p>
   <button onClick={restart} className="finish-btn-restart">
     <img src={restartIcon} alt=""/>
   </button>
+  <p className="finish-result">{result}/{wordsInGame || 20}</p>
+  {pointsSeries !== undefined ? pointsSeries.map((el, i) => 
+    // <p key={i}>{listWord[i].word}:{el ? '&#10004;' : '&#10006;'}</p>
+    <p key={i}><img src={el ? right : wrong} width='25'></img>{' '}{listWord[i].word}{' = '}{listWord[i].wordTranslate}</p>
+
+  ) : ''}
   </div>;
 
 PopupFinishGame.propTypes = {

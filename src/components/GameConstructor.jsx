@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import PopupFinishGame from './PopupFinishGame';
 import GameBoardConstructor from './GameBoardConstructor';
@@ -6,11 +6,15 @@ import LangApi from './LangApi';
 import { getRandomNumber } from '../utils';
 import Loader from './Loader';
 
-const GameConstructor = ({ dataListWords, difficult }) => {
+const GameConstructor = ({ dataListWords, difficult, fsMode, fullscreen }) => {
   const [isFinish, setFinish] = useState(false);
   const [result, setResult] = useState(0);
   const [wordsInGame, setWordsInGame] = useState(0);
   const [points, setPointsValue] = useState(0);
+
+  const [pointsSeries, updatePointsSeries] = useState([]);
+  const [listWord, setListWord] = useState([]);
+
   let listWords = JSON.parse(JSON.stringify(dataListWords));
   const [arrPagesInGame, changeArrPages] = useState([listWords[0].page]);
 
@@ -26,10 +30,17 @@ const GameConstructor = ({ dataListWords, difficult }) => {
       });
   };
 
-  const setResultSprint = (words, rightAnswers, pointsGame) => {
+  useEffect(() => {
+    document.getElementById("game-constructor-field").addEventListener('dblclick', fullscreen);
+    // return endTimer;
+  }, []);
+
+  const setResultSprint = (words, rightAnswers, pointsGame, pointsSeries, listWord) => {
     setResult(rightAnswers);
     setWordsInGame(words);
     setPointsValue(pointsGame);
+    updatePointsSeries(pointsSeries);
+    setListWord(listWord);
   };
 
   const setContent = () => {
@@ -40,20 +51,22 @@ const GameConstructor = ({ dataListWords, difficult }) => {
         setFinish={setFinish}
         setResult={setResultSprint}
         arrPagesInGame={arrPagesInGame}
-        difficult={difficult}/>;
+        difficult={difficult}/>
       }
-      return <Loader/>;
+      return <Loader/>
     }
     return <PopupFinishGame
     wordsInGame={wordsInGame}
     result={result}
     restart={restart}
-    points={points}/>;
+    points={points}
+    pointsSeries={pointsSeries}
+    listWord={listWord}/>
   };
 
-  return <article className="h100 game game-constructor">
+  return <article className="h100 game game-constructor" id="game-constructor-field">
     {setContent()}
-  </article>;
+  </article>
 };
 
 GameConstructor.propTypes = {
