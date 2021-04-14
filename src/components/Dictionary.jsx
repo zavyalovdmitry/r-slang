@@ -61,19 +61,21 @@ class Dictionary extends Component {
     const { section } = this.state;
     const { userId, token } = this.context.user;
     const auth = (userId !== null && token !== null);
-    if (auth) {
-      LangApi.getUserWordsWithFilter(userId, token, section, group, page)
-        .then(
-          (words) => {
-            const { data } = words;
-            this.setState({ data, page, group });
-          },
-        );
-    } else {
-      LangApi.getWords(group, page)
-        .then((words) => words.json())
-        .then((data) => this.setState({ data, page, group }));
-    }
+    this.setState({ page, group, data: [] }, () => {
+      if (auth) {
+        LangApi.getUserWordsWithFilter(userId, token, section, group, page)
+          .then(
+            (words) => {
+              const { data } = words;
+              this.setState({ data });
+            },
+          );
+      } else {
+        LangApi.getWords(group, page)
+          .then((words) => words.json())
+          .then((data) => this.setState({ data, page, group }));
+      }
+    });
   }
 
   changeSection = (section) => {
@@ -121,7 +123,7 @@ class Dictionary extends Component {
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
-    return <article className={`group-${group}`}>
+    return <article>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
@@ -130,7 +132,7 @@ class Dictionary extends Component {
               <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
               <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
             </Fragment>}
-        <div className="words-wrap">
+        <div className={`words-wrap group-${group}`}>
           {words}
         </div>
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
