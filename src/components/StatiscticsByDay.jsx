@@ -15,7 +15,7 @@ const getDates = (stats) => {
 
 const dates = getDates(STATS);
 
-const StatiscticsByDay = () => {
+const StatiscticsByDay = ({dataSet}) => {
    const [date, setDate] = useState(dates[dates.length - 1]);
       
    const formatDataByDays = (stats, date, keyParam) => {

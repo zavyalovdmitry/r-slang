@@ -30,7 +30,7 @@ const formatDataCumul = (stats) => {
    return output;
 }
 
-const StatiscticsAll = () => (
+const StatiscticsAll = ({dataSet}) => (
  <article>
     За весь период обучения
    <div className='stats-graphs-wrapper'>

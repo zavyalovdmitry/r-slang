@@ -42,11 +42,11 @@ const GameBoardConstructor = ({
     )
   }
 
-  useEffect(() => {
-    document.addEventListener('keydown', 
-      (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
-    );
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener('keydown', 
+  //     (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
+  //   );
+  // }, [currentUserWord]);
 
   const changeStatistics = (action) => {
     if (context.user.userId) {
@@ -57,9 +57,9 @@ const GameBoardConstructor = ({
 
   const checkLetter = (letter) => {
     return(
-            (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
-            (listWord[currentWord].word.split('').filter((el) => el === letter).length >
-            currentUserWord.filter((el) => el === letter).length)
+            // (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
+            listWord[currentWord].word.split('').filter((el) => el === letter).length >
+            currentUserWord.filter((el) => el === letter).length
     );
   }
 
@@ -67,7 +67,7 @@ const GameBoardConstructor = ({
     let arr = currentUserWord;
     arr[currentUserWord.indexOf('_')] = letter;
     updateUserWord([...arr]);
-    console.log(currentUserWord);
+    // console.log(currentUserWord);
   }
 
   useEffect(() => {
