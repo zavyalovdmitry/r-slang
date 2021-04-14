@@ -6,12 +6,12 @@ import ChooseDifficult from './ChooseDifficult';
 import GameAudiobattle from './GameAudiobattle';
 import Loader from './Loader';
 
-const Audiobattle = () => {
-  const [listWords, setList] = useState([]);
+const Audiobattle = ({ listDictionary }) => {
+  const [listWords, setList] = useState(listDictionary || []);
   const [difficult, setDifficult] = useState(-1);
 
   useEffect(() => {
-    if (difficult !== -1) {
+    if (difficult !== -1 && !listDictionary) {
       LangApi.getWords(difficult, getRandomNumber(0, 29))
         .then((data) => data.json())
         .then((words) => setList(words));
@@ -19,7 +19,7 @@ const Audiobattle = () => {
   }, [difficult]);
 
   const setContent = () => {
-    if (difficult !== -1) {
+    if (difficult !== -1 || listDictionary) {
       if (listWords.length) {
         return <GameAudiobattle dataListWords={listWords}/>;
       }
@@ -32,7 +32,7 @@ const Audiobattle = () => {
 };
 
 Audiobattle.propTypes = {
-  difficult: PropTypes.number,
+  listDictionary: PropTypes.array,
 };
 
 export default Audiobattle;

@@ -8,15 +8,15 @@ import Loader from './Loader';
 
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
-const Constructor = () => {
-  const [listWords, setList] = useState([]);
+const Constructor = ({ listDictionary }) => {
+  const [listWords, setList] = useState(listDictionary || []);
   const [difficult, setDifficult] = useState(-1);
 
   const handle = useFullScreenHandle();
   const [fsMode, fsModeSet] = useState(false);
 
   useEffect(() => {
-    if (difficult !== -1) {
+    if (difficult !== -1 && !listDictionary) {
       LangApi.getWords(difficult, getRandomNumber(0, 29))
         .then((data) => data.json())
         .then((words) => setList(words));
@@ -24,7 +24,7 @@ const Constructor = () => {
   }, [difficult]);
 
   const setContent = () => {
-    if (difficult !== -1) {
+    if (difficult !== -1 || listDictionary) {
       if (listWords.length) {
         return <FullScreen handle={handle} className='FS'>
                 <GameConstructor 
@@ -43,7 +43,7 @@ const Constructor = () => {
 };
 
 Constructor.propTypes = {
-  difficult: PropTypes.number,
+  listDictionary: PropTypes.array,
 };
 
 export default Constructor;
