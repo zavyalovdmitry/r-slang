@@ -121,7 +121,7 @@ class Dictionary extends Component {
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
-    return <article className={`group=${group}`}>
+    return <article className={`group-${group}`}>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
