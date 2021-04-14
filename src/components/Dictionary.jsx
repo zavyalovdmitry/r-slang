@@ -55,7 +55,6 @@ class Dictionary extends Component {
       );
   }
 
-
   changeGroupAndPage = (groupCh = null, pageCh = null) => {
     const page = (pageCh !== null) ? pageCh : this.state.page;
     const group = (groupCh !== null) ? groupCh : this.state.group;
@@ -122,7 +121,7 @@ class Dictionary extends Component {
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
-    return <article>
+    return <article className={`group=${group}`}>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
