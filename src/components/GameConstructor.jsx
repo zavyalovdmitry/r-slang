@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import PopupFinishGame from './PopupFinishGame';
 import GameBoardConstructor from './GameBoardConstructor';
@@ -6,7 +6,7 @@ import LangApi from './LangApi';
 import { getRandomNumber } from '../utils';
 import Loader from './Loader';
 
-const GameConstructor = ({ dataListWords, difficult }) => {
+const GameConstructor = ({ dataListWords, difficult, fsMode, fullscreen }) => {
   const [isFinish, setFinish] = useState(false);
   const [result, setResult] = useState(0);
   const [wordsInGame, setWordsInGame] = useState(0);
@@ -30,6 +30,11 @@ const GameConstructor = ({ dataListWords, difficult }) => {
       });
   };
 
+  useEffect(() => {
+    document.getElementById("game-constructor-field").addEventListener('dblclick', fullscreen);
+    // return endTimer;
+  }, []);
+
   const setResultSprint = (words, rightAnswers, pointsGame, pointsSeries, listWord) => {
     setResult(rightAnswers);
     setWordsInGame(words);
@@ -46,9 +51,9 @@ const GameConstructor = ({ dataListWords, difficult }) => {
         setFinish={setFinish}
         setResult={setResultSprint}
         arrPagesInGame={arrPagesInGame}
-        difficult={difficult}/>;
+        difficult={difficult}/>
       }
-      return <Loader/>;
+      return <Loader/>
     }
     return <PopupFinishGame
     wordsInGame={wordsInGame}
@@ -56,12 +61,12 @@ const GameConstructor = ({ dataListWords, difficult }) => {
     restart={restart}
     points={points}
     pointsSeries={pointsSeries}
-    listWord={listWord}/>;
+    listWord={listWord}/>
   };
 
-  return <article className="h100 game game-constructor">
+  return <article className="h100 game game-constructor" id="game-constructor-field">
     {setContent()}
-  </article>;
+  </article>
 };
 
 GameConstructor.propTypes = {

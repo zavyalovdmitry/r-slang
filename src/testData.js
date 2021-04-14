@@ -1,3 +1,8 @@
+// LangApi.updateGameStatistic(userId, token, 'game-1', [false, true, true, true, true, false, true]) - обновление статистики
+// getGameStatistic(userId, token) - получение статистики
+
+
+
 const STATS = {
     "learnedWords": 0,
     "optional": {

@@ -21,7 +21,7 @@ const GameBoardConstructor = ({
   const arrPages = arrPagesInGame;
   let timer;
 
-  const [currentUserWord, updateUserWord] = useState(['']);
+  const [currentUserWord, updateUserWord] = useState(['_']);
   const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g' ,'h', 'i', 'j', 'k', 'l',
                     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
@@ -42,15 +42,18 @@ const GameBoardConstructor = ({
     )
   }
 
+  useEffect(() => {
+    document.addEventListener('keydown', 
+      (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
+    );
+  }, []);
+
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
         context.user.token, listWord[currentWord].id, action, null, 'game-4');
     }
   };
-
-  // updateUserWords(userId, token, wordId, action,null, game)
-  // https://react-rs-lang.herokuapp.com/users/60670ff786026c0015804864/words/5e9f5ee35eb9e72bc21af6e8
 
   const checkLetter = (letter) => {
     return(
@@ -64,6 +67,7 @@ const GameBoardConstructor = ({
     let arr = currentUserWord;
     arr[currentUserWord.indexOf('_')] = letter;
     updateUserWord([...arr]);
+    console.log(currentUserWord);
   }
 
   useEffect(() => {
@@ -91,6 +95,12 @@ const GameBoardConstructor = ({
     console.log(currentUserWord.join(''));
     console.log(pointsSeries);
   };
+
+  const delLetter = (e) => {
+    let arr = currentUserWord;
+    arr[currentUserWord.indexOf('_') - 1] = '_';
+    updateUserWord([...arr]);
+  }
 
   const getNextWord = (e) => {
     if (currentWord % 10 === 0 && currentWord !== 0) {
@@ -150,7 +160,8 @@ const GameBoardConstructor = ({
       {alphabetBoard()}
     </div>
     <div className="game-sprint__btn-block">
-      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)}>дальше</button>
+      <button className="game-sprint__btn game-sprint__btn--wrong" onClick={(e) => delLetter(e)}>{'удалить букву'}</button>
+      <button className="game-sprint__btn game-sprint__btn--right" onClick={(e) => getNextWord(e)}>{'следующее слово'}</button>
     </div>
     <p className="timer">
       {time}

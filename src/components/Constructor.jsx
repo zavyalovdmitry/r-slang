@@ -6,9 +6,14 @@ import ChooseDifficult from './ChooseDifficult';
 import GameConstructor from './GameConstructor';
 import Loader from './Loader';
 
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+
 const Constructor = () => {
   const [listWords, setList] = useState([]);
   const [difficult, setDifficult] = useState(-1);
+
+  const handle = useFullScreenHandle();
+  const [fsMode, fsModeSet] = useState(false);
 
   useEffect(() => {
     if (difficult !== -1) {
@@ -21,7 +26,13 @@ const Constructor = () => {
   const setContent = () => {
     if (difficult !== -1) {
       if (listWords.length) {
-        return <GameConstructor dataListWords={listWords} difficult={difficult}/>;
+        return <FullScreen handle={handle} className='FS'>
+                <GameConstructor 
+                  dataListWords={listWords} 
+                  difficult={difficult}
+                  fsMode={fsMode} 
+                  fullscreen={handle.enter}/>
+              </FullScreen>
       }
       return <Loader/>;
     }
