@@ -30,7 +30,6 @@ class App extends Component {
         userId: null,
         token: null,
       },
-      /* userWords: [], */
     };
   }
 
@@ -81,15 +80,6 @@ class App extends Component {
     this.setState({ user: { userId, token } });
   }
 
-  /* changeUserData = () => {
-    const { userId, token } = this.state.user;
-    LangApi.getUserWords(userId, token)
-      .then((data) => data.json())
-      .then((userWords) => {
-        this.setState({ userWords });
-      });
-  } */
-
   render = () => {
     const {
       wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible, user,
@@ -99,8 +89,6 @@ class App extends Component {
     deleteWordVisible.action = this.changeDeleteWord;
     hardWordVisible.action = this.changeHardWord;
     user.logIn = this.SetlogInUser;
-    /* user.userWords = this.state.userWords;
-    user.changeUserWords = this.changeUserData; */
 
     return (
     <SettingsContext.Provider

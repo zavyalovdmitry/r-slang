@@ -31,7 +31,6 @@ class Dictionary extends Component {
     this.changeGroupAndPage(this.props.page, this.props.group);
   }
 
-  // подсчёт групп
   quantityGroups = (group = 0, page = 0) => {
     const { userId, token } = this.context.user;
     LangApi.groupCount(userId, token, false, this.state.section)
@@ -43,7 +42,6 @@ class Dictionary extends Component {
       );
   }
 
-  // подсчёт страниц
   quantityPages = (group, page, groups) => {
     const { userId, token } = this.context.user;
     LangApi.groupCount(userId, token, group, this.state.section)
@@ -57,7 +55,7 @@ class Dictionary extends Component {
       );
   }
 
-  // добавить обработчик страниц сюда
+
   changeGroupAndPage = (groupCh = null, pageCh = null) => {
     const page = (pageCh !== null) ? pageCh : this.state.page;
     const group = (groupCh !== null) ? groupCh : this.state.group;
@@ -68,7 +66,6 @@ class Dictionary extends Component {
       LangApi.getUserWordsWithFilter(userId, token, section, group, page)
         .then(
           (words) => {
-            /* LangApi.groupCount(userId, token, 0, this.state.section); */
             const { data } = words;
             this.setState({ data, page, group });
           },
@@ -80,7 +77,6 @@ class Dictionary extends Component {
     }
   }
 
-  // добавить обработчик групп сюда
   changeSection = (section) => {
     this.setState({
       section, groups: 0, pages: 0, data: [],
@@ -91,7 +87,6 @@ class Dictionary extends Component {
     this.setState({ data });
   }
 
-  // status: false - del, true - hard
   changeWordStatus = (wordId, status) => {
     const { userId, token } = this.context.user;
     LangApi.updateUserWords(userId, token, wordId, null, status)
@@ -102,7 +97,6 @@ class Dictionary extends Component {
     const { userId, token } = this.context.user;
     const auth = (userId !== null && token !== null);
 
-    // разделы словаря
     const sections = [
       { title: 'слова', value: 0 },
       { title: 'изучаемые слова', value: 1, difficulty: ['low', 'hard'] },
@@ -114,7 +108,6 @@ class Dictionary extends Component {
       data, page, group, section,
     } = this.state;
 
-    // список выводимых слов
     let words;
     if (auth) {
       words = data.map((word) => {
@@ -130,15 +123,6 @@ class Dictionary extends Component {
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
 
     return <article>
-    <button onClick={ this.quantityGroupAndPage }>
-        quantityGroupAndPage test
-      </button>
-      <button onClick={
-        // eslint-disable-next-line max-len
-        () => LangApi.updateGameStatistic(userId, token, 'game-1', [false, true, true, true, true, false, true])
-        }>
-      updateGameStatistic test
-      </button>
       {this.state.data.length ? <Fragment>
         <Settings />
         {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}

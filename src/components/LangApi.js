@@ -107,7 +107,6 @@ export default class LangApi {
     }
 
     static getUserWordsWithFilter = (userId, token, qry = 0, group = null, page = 0) => {
-      // 0 - слова , 1- изучаемын, 2 - сложные,3 - удалённые
       const chosenGroup = group === null ? '' : `group=${group}&`;
       const queryForPageOfAll = qry !== 5;
       const query = queryForPageOfAll ? encodeURIComponent(this.queryAnd([this.querys[qry], `"page": ${this.queryEq(page)}`])) : encodeURIComponent(`{${this.querys[qry]}}`);
@@ -124,17 +123,12 @@ export default class LangApi {
         })
         .then((data) => data.json())
         .then((words) => {
-          /* console.log(words[0]);
-            console.log(words[0].totalCount[0].count); // колличество таких элементов всего
-          console.log(words[0].paginatedResults); // массив значений */
           const pageCount = 0;
           const data = words[0].paginatedResults;
           return { pages: pageCount, data };
         });
     }
 
-    // action: false -not guessed, true - guessed, null - just add
-    // status: false - del, true - hard, null - low
     // eslint-disable-next-line max-len
     static updateUserWords = (userId, token, wordId, action = null, status = null, game = null) => this.getUserWords(userId, token, wordId)
       .then(
@@ -231,7 +225,6 @@ export default class LangApi {
         return res;
       }
 
-      // for groupCount()
       static urlForSearchCount = (userId, group, i, qry) => {
         let filter; let grQuery;
         if (group !== false) {
