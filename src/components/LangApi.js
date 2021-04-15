@@ -355,4 +355,45 @@ export default class LangApi {
             }
           });
       }
+
+      static getUserSettings = (userId, token) => {
+        const url = `${this.homeApi}users/${userId}/settings`;
+        return fetch(url, {
+          method: 'GET',
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          },
+        })
+          .then((answer) => (answer.status === 200 ? answer.json() : undefined));
+      }
+
+      static setUserSettings = (userId, token, optional) => {
+        console.log(optional);
+        this.getUserSettings(userId, token)
+          .then((settings) => {
+            let newSettings = {};
+            if (settings) {
+              newSettings.optional = optional;
+              newSettings.wordsPerDay = settings.wordsPerDay;
+            } else {
+              newSettings = {
+                wordsPerDay: 1,
+                optional,
+              };
+            }
+            const url = `${this.homeApi}users/${userId}/settings`;
+            fetch(url, {
+              method: 'PUT',
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(newSettings),
+            });
+          });
+      }
 }

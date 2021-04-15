@@ -18,6 +18,7 @@ import SettingsContext from './SettingsContext';
 import Register from './Register';
 import Login from './Login';
 import Profile from './Profile';
+import LangApi from './LangApi';
 
 class App extends Component {
   constructor() {
@@ -43,13 +44,57 @@ class App extends Component {
     }
   }
 
+  saveSettings = () => {
+    const { userId, token } = this.state.user;
+    const optional = {
+      wordTranslateVisible: this.state.wordTranslateVisible.value,
+      textTranslateVisible: this.state.textTranslateVisible.value,
+      deleteWordVisible: this.state.deleteWordVisible.value,
+      hardWordVisible: this.state.hardWordVisible.value,
+    };
+    LangApi.setUserSettings(userId, token, optional);
+  }
+
+  loadSettings = () => {
+    const { userId, token } = this.state.user;
+    LangApi.getUserSettings(userId, token)
+      .then(
+        (settings) => {
+          console.log(settings);
+          if (settings) {
+            const {
+              wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
+            } = settings.optional;
+            this.setState((prevState) => ({
+              wordTranslateVisible: {
+                value: wordTranslateVisible,
+                title: prevState.wordTranslateVisible.title,
+              },
+              textTranslateVisible: {
+                value: textTranslateVisible,
+                title: prevState.textTranslateVisible.title,
+              },
+              deleteWordVisible: {
+                value: deleteWordVisible,
+                title: prevState.deleteWordVisible.title,
+              },
+              hardWordVisible: {
+                value: hardWordVisible,
+                title: prevState.hardWordVisible.title,
+              },
+            }));
+          }
+        },
+      );
+  }
+
   changeWordTranslate = () => {
     this.setState((prevState) => ({
       wordTranslateVisible: {
         value: !prevState.wordTranslateVisible.value,
         title: prevState.wordTranslateVisible.title,
       },
-    }));
+    }), () => this.saveSettings());
   }
 
   changeTextTranslate = () => {
@@ -58,7 +103,7 @@ class App extends Component {
         value: !prevState.textTranslateVisible.value,
         title: prevState.textTranslateVisible.title,
       },
-    }));
+    }), () => this.saveSettings());
   }
 
   changeDeleteWord = () => {
@@ -67,7 +112,7 @@ class App extends Component {
         value: !prevState.deleteWordVisible.value,
         title: prevState.deleteWordVisible.title,
       },
-    }));
+    }), () => this.saveSettings());
   }
 
   changeHardWord = () => {
@@ -76,11 +121,12 @@ class App extends Component {
         value: !prevState.hardWordVisible.value,
         title: prevState.hardWordVisible.title,
       },
-    }));
+    }), () => this.saveSettings());
   }
 
   SetlogInUser = (userId, token, refreshToken) => {
-    this.setState({ user: { userId, token, refreshToken } });
+    this.setState({ user: { userId, token, refreshToken } },
+      () => this.loadSettings());
   }
 
   setDataForGame = (dataForGame) => {
