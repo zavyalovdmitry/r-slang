@@ -1,7 +1,9 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import React from 'react';
-import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
+import {
+  VictoryChart, VictoryLine, VictoryScatter, VictoryLabel,
+} from 'victory';
 
 const formatDataByDays = (stats) => {
   const output = [];
@@ -26,7 +28,12 @@ const StatiscticsAll = ({ dataSet }) => (
     За весь период обучения
    {formatDataByDays(dataSet).length !== 1
      ? <div className='stats-graphs-wrapper'>
-         <VictoryChart>
+         <VictoryChart
+            animate={{ duration: 1000 }}
+            maxDomain={formatDataByDays(dataSet).reduce((accum, item) => accum + item.y, 0) === 0
+              ? { y: 1 } : ''}
+         >
+            <VictoryLabel text="Ежедневный прогресс" x={225} y={30} textAnchor="middle"/>
             <VictoryLine
                interpolation={'linear'} data={formatDataByDays(dataSet)}
                style={{ data: { stroke: '#c43a31' } }}
@@ -36,7 +43,12 @@ const StatiscticsAll = ({ dataSet }) => (
                style={{ data: { fill: '#c43a31' } }}
             />
          </VictoryChart>
-         <VictoryChart>
+         <VictoryChart
+            animate={{ duration: 1000 }}
+            maxDomain={formatDataCumul(dataSet).reduce((accum, item) => accum + item.y, 0) === 0
+              ? { y: 1 } : ''}
+         >
+            <VictoryLabel text="Общий прогресс" x={225} y={30} textAnchor="middle"/>
             <VictoryLine
                interpolation={'linear'} data={formatDataCumul(dataSet)}
                style={{ data: { stroke: '#c43a31' } }}
