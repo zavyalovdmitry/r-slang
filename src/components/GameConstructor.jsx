@@ -7,7 +7,9 @@ import { getRandomNumber } from '../utils';
 import Loader from './Loader';
 import SettingsContext from './SettingsContext';
 
-const GameConstructor = ({ dataListWords, difficult, fsMode, fullscreen }) => {
+const GameConstructor = ({
+  dataListWords, difficult, fsMode, fullscreen,
+}) => {
   const [isFinish, setFinish] = useState(false);
   const [result, setResult] = useState(0);
   const [wordsInGame, setWordsInGame] = useState(0);
@@ -34,7 +36,7 @@ const GameConstructor = ({ dataListWords, difficult, fsMode, fullscreen }) => {
   };
 
   useEffect(() => {
-    document.getElementById("game-constructor-field").addEventListener('dblclick', fullscreen);
+    document.getElementById('game-constructor-field').addEventListener('dblclick', fullscreen);
     // return endTimer;
   }, []);
 
@@ -54,25 +56,23 @@ const GameConstructor = ({ dataListWords, difficult, fsMode, fullscreen }) => {
         setFinish={setFinish}
         setResult={setResultSprint}
         arrPagesInGame={arrPagesInGame}
-        difficult={difficult}/>
+        difficult={difficult}/>;
       }
-      return <Loader/>
+      return <Loader/>;
     }
-    // console.log(pointsSeries)
     LangApi.updateGameStatistic(context.user.userId, context.user.token, 'game-4', pointsSeries);
-// console.log(context.user.userId)
     return <PopupFinishGame
     wordsInGame={wordsInGame}
     result={result}
     restart={restart}
     points={points}
     pointsSeries={pointsSeries}
-    listWord={listWord}/>
+    listWord={listWord}/>;
   };
 
   return <article className="h100 game game-constructor" id="game-constructor-field">
     {setContent()}
-  </article>
+  </article>;
 };
 
 GameConstructor.propTypes = {

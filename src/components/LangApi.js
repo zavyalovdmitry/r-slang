@@ -370,7 +370,6 @@ export default class LangApi {
       }
 
       static setUserSettings = (userId, token, optional) => {
-        console.log(optional);
         this.getUserSettings(userId, token)
           .then((settings) => {
             let newSettings = {};

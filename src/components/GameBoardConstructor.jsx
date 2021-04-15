@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useContext
+  useState, useEffect, useContext,
 } from 'react';
 import { PropTypes } from 'prop-types';
 import { getRandomNumber } from '../utils';
@@ -22,28 +22,24 @@ const GameBoardConstructor = ({
   let timer;
 
   const [currentUserWord, updateUserWord] = useState(['_']);
-  const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g' ,'h', 'i', 'j', 'k', 'l',
-                    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-  const alphabetBoard = () => {
-    return(
+  const alphabetBoard = () => (
       <>
-        {alphabet.map((el, i) => {
-            return(<span className={'game-constructor__alphBoard-btn ' + 
-                          (checkLetter(el) ? 'active' : 'outgame')} 
+        {alphabet.map((el, i) => (<span className={`game-constructor__alphBoard-btn ${
+          checkLetter(el) ? 'active' : 'outgame'}`}
                           key={i}
                           onClick={checkLetter(el) ? (e) => addLetter(e, el) : null}
                     >
               {el}
             </span>
-            )}
-        )}
+        ))}
       </>
-    )
-  }
+  );
 
   // useEffect(() => {
-  //   document.addEventListener('keydown', 
+  //   document.addEventListener('keydown',
   //     (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
   //   );
   // }, []);
@@ -55,22 +51,19 @@ const GameBoardConstructor = ({
     }
   };
 
-  const checkLetter = (letter) => {
-    return(
-            listWord[currentWord].word.split('').filter((el) => el === letter).length >
-            currentUserWord.filter((el) => el === letter).length
-    );
-  }
+  const checkLetter = (letter) => (
+    listWord[currentWord].word.split('').filter((el) => el === letter).length
+            > currentUserWord.filter((el) => el === letter).length
+  );
 
   const addLetter = (e, letter) => {
-    let arr = currentUserWord;
+    const arr = currentUserWord;
     arr[currentUserWord.indexOf('_')] = letter;
     updateUserWord([...arr]);
-    console.log(currentUserWord);
-  }
+  };
 
   useEffect(() => {
-    updateUserWord(listWord[currentWord].word.split('').map(() => '_'))
+    updateUserWord(listWord[currentWord].word.split('').map(() => '_'));
   }, [currentWord]);
 
   const getRandomIndex = () => {
@@ -90,16 +83,13 @@ const GameBoardConstructor = ({
       changeStatistics(false);
     }
     updatePointsSeries([...pointsSeries, listWord[currentWord].word === currentUserWord.join('')]);
-    console.log(listWord[currentWord].word);
-    console.log(currentUserWord.join(''));
-    console.log(pointsSeries);
   };
 
   const delLetter = (e) => {
-    let arr = currentUserWord;
+    const arr = currentUserWord;
     arr[currentUserWord.indexOf('_') - 1] = '_';
     updateUserWord([...arr]);
-  }
+  };
 
   const getNextWord = (e) => {
     if (currentWord % 10 === 0 && currentWord !== 0) {
@@ -153,7 +143,7 @@ const GameBoardConstructor = ({
       <div className="game-sprint__words-block">
         <p className="game-sprint__translate">{listWord[currentWord].wordTranslate}</p>
         <p className="game-sprint__equal">=</p>
-        <p className="game-sprint__word">{currentUserWord.map((el) => el + ' ')}</p>
+        <p className="game-sprint__word">{currentUserWord.map((el) => `${el} `)}</p>
       </div>
     </div>
     <div>

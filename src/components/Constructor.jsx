@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import LangApi from './LangApi';
 import { getRandomNumber } from '../utils';
 import ChooseDifficult from './ChooseDifficult';
 import GameConstructor from './GameConstructor';
 import Loader from './Loader';
-
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 const Constructor = ({ listDictionary, inputDifficult = -1 }) => {
   const [listWords, setList] = useState(listDictionary || []);
@@ -27,12 +26,12 @@ const Constructor = ({ listDictionary, inputDifficult = -1 }) => {
     if (difficult !== -1 || listDictionary) {
       if (listWords.length) {
         return <FullScreen handle={handle} className='FS'>
-                <GameConstructor 
-                  dataListWords={listWords} 
+                <GameConstructor
+                  dataListWords={listWords}
                   difficult={difficult}
-                  fsMode={fsMode} 
+                  fsMode={fsMode}
                   fullscreen={handle.enter}/>
-              </FullScreen>
+              </FullScreen>;
       }
       return <Loader/>;
     }

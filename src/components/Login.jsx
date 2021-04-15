@@ -65,7 +65,6 @@ export default class Login extends Component {
           this.context.user.logIn(loginData.userId, loginData.token);
           this.props.history.push('/profile');
           window.location.reload();
-          // console.log(sessionStorage);
         },
         (error) => {
           const resMessage = (error.response
@@ -73,7 +72,6 @@ export default class Login extends Component {
               && error.response.data.message)
             || error.message
             || error.toString();
-          console.log(resMessage);
           this.setState({
             loading: false,
             message: 'Неверный email или пароль.',

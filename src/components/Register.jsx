@@ -105,7 +105,6 @@ export default class Register extends Component {
             message: 'Вы зарегистрированы!',
             successful: true
           });
-          console.log(response);
           this.props.history.push("/");
           window.location.reload();
         },

@@ -19,6 +19,7 @@ import Register from './Register';
 import Login from './Login';
 import Profile from './Profile';
 import LangApi from './LangApi';
+import Loader from './Loader';
 
 class App extends Component {
   constructor() {
@@ -29,7 +30,7 @@ class App extends Component {
       deleteWordVisible: { value: true, title: 'отоброжать кнопку "удалить слово"' },
       hardWordVisible: { value: true, title: 'отоброжать кнопку "тяжёлое слово"' },
       user: {
-        userId: null,
+        userId: false,
         token: null,
         refreshToken: null,
       },
@@ -41,18 +42,20 @@ class App extends Component {
     if (sessionStorage.getItem('auth') !== null) {
       const { userId, token, refreshToken } = JSON.parse(sessionStorage.getItem('auth'));
       this.SetlogInUser(userId, token, refreshToken);
-    }
+    } else this.SetlogInUser(null, null, null);
   }
 
   saveSettings = () => {
     const { userId, token } = this.state.user;
-    const optional = {
-      wordTranslateVisible: this.state.wordTranslateVisible.value,
-      textTranslateVisible: this.state.textTranslateVisible.value,
-      deleteWordVisible: this.state.deleteWordVisible.value,
-      hardWordVisible: this.state.hardWordVisible.value,
-    };
-    LangApi.setUserSettings(userId, token, optional);
+    if (userId && token) {
+      const optional = {
+        wordTranslateVisible: this.state.wordTranslateVisible.value,
+        textTranslateVisible: this.state.textTranslateVisible.value,
+        deleteWordVisible: this.state.deleteWordVisible.value,
+        hardWordVisible: this.state.hardWordVisible.value,
+      };
+      LangApi.setUserSettings(userId, token, optional);
+    }
   }
 
   loadSettings = () => {
@@ -60,7 +63,6 @@ class App extends Component {
     LangApi.getUserSettings(userId, token)
       .then(
         (settings) => {
-          console.log(settings);
           if (settings) {
             const {
               wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible,
@@ -145,7 +147,7 @@ class App extends Component {
     user.logIn = this.SetlogInUser;
 
     return (
-      <SettingsContext.Provider
+       <SettingsContext.Provider
         value={{
           wordTranslateVisible,
           textTranslateVisible,
@@ -156,7 +158,8 @@ class App extends Component {
         }}
       >
         <Header />
-        <main>
+       { user.userId !== false
+         ? <main>
           <Switch>
             <Route path="/dictionary">
               <Dictionary />
@@ -166,16 +169,16 @@ class App extends Component {
             </Route>
 
             <Route path="/selectedSavana">
-              <Savanna listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
+              <Savanna listDictionary={dataForGame} inputDifficult={dataForGame && dataForGame[0] ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedAudiobattle">
-              <Audiobattle listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
+              <Audiobattle listDictionary={dataForGame} inputDifficult={dataForGame && dataForGame[0] ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedSprint">
-              <Sprint listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
+              <Sprint listDictionary={dataForGame} inputDifficult={dataForGame && dataForGame[0] ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedConstructor">
-              <Constructor listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
+              <Constructor listDictionary={dataForGame} inputDifficult={dataForGame && dataForGame[0] ? dataForGame[0].group : -1} />
             </Route>
 
             <Route path="/statisctics">
@@ -205,7 +208,7 @@ class App extends Component {
             <Redirect from='/' to='/main' />
           </Switch>
         </main>
-        <Footer />
+         : <Loader /> }<Footer />
       </SettingsContext.Provider>);
   }
 }

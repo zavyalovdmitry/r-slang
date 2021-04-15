@@ -28,10 +28,22 @@ class Dictionary extends Component {
 
   componentDidMount = () => {
     const { userId, token } = this.context.user;
+    const pagePosition = JSON.parse(sessionStorage.getItem('pagePosition'));
+
     if (userId !== null && token !== null) {
-      this.quantityGroups();
+      if (pagePosition) {
+        const { section, page, group } = pagePosition;
+        this.setState({ section, page, group }, () => this.quantityGroups(group, page));
+      } else this.quantityGroups();
+    } else {
+      let { page } = this.props;
+      let { group } = this.props;
+      if (pagePosition && pagePosition.section === 1) {
+        page = pagePosition.page;
+        group = pagePosition.group;
+      }
+      this.changeGroupAndPage(group, page);
     }
-    this.changeGroupAndPage(this.props.page, this.props.group);
   }
 
   quantityGroups = (group = 0, page = 0) => {
@@ -61,7 +73,7 @@ class Dictionary extends Component {
   }
 
   changeGroupAndPage = (groupCh = null, pageCh = null) => {
-    const page = (pageCh !== null) ? pageCh : this.state.page;
+    const page = (pageCh !== null) ? pageCh : 0;
     const group = (groupCh !== null) ? groupCh : this.state.group;
     const { section } = this.state;
     const { userId, token } = this.context.user;
@@ -70,6 +82,7 @@ class Dictionary extends Component {
       { page, group, data: [] },
       () => {
         if (auth) {
+          sessionStorage.setItem('pagePosition', JSON.stringify({ section, group, page }));
           LangApi.getUserWordsWithFilter(userId, token, section, group, page)
             .then((words) => {
               const { data } = words;

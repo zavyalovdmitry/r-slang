@@ -1,78 +1,74 @@
 import React, {
-   useEffect,
-   useState } from 'react';
+  useEffect,
+  useState,
+} from 'react';
 import Table from 'react-bootstrap/Table';
 import Dropdown from 'react-bootstrap/Dropdown';
 import SplitButton from 'react-bootstrap/SplitButton';
 
-const StatiscticsByDay = ({dataSet, dates}) => {
-   const [date, setDate] = useState('');
-   
-   useEffect(() => {
-      setDate(dates[dates.length - 1]);
-   }, [])
+const StatiscticsByDay = ({ dataSet, dates }) => {
+  const [date, setDate] = useState('');
 
-   console.log(dataSet) 
-   console.log(date) 
+  useEffect(() => {
+    setDate(dates[dates.length - 1]);
+  }, []);
 
-   const formatDataByDays = (stats, date, keyParam) => {
-      let output = [];
-      for (let key in stats.optional[date]) {
-         output.push(stats.optional[date][key][keyParam])
-      };
-      output.splice(0, 1);
-      output.push(stats.optional[date][keyParam]);
-      return output;
-   }
+  const formatDataByDays = (stats, date, keyParam) => {
+    const output = [];
+    for (const key in stats.optional[date]) {
+      output.push(stats.optional[date][key][keyParam]);
+    }
+    output.splice(0, 1);
+    output.push(stats.optional[date][keyParam]);
+    return output;
+  };
 
-   const getPercents = () => {
-      let outputs = formatDataByDays(dataSet, date, 'outputsWords');
-      let trues = formatDataByDays(dataSet, date, 'trues');
-      let res = [];
+  const getPercents = () => {
+    const outputs = formatDataByDays(dataSet, date, 'outputsWords');
+    const trues = formatDataByDays(dataSet, date, 'trues');
+    const res = [];
 
-      outputs.splice(-1, 1);
-      trues.splice(-1, 1);
+    outputs.splice(-1, 1);
+    trues.splice(-1, 1);
 
-      outputs.push(outputs.reduce((a, b) => a + b, 0));
-      trues.push(trues.reduce((a, b) => a + b, 0));
+    outputs.push(outputs.reduce((a, b) => a + b, 0));
+    trues.push(trues.reduce((a, b) => a + b, 0));
 
-      for (let i = 0; i < trues.length; i++) {
-         res.push(Math.ceil(100 * trues[i] / outputs[i]) ? `${Math.ceil(100 * trues[i] / outputs[i])}%` : '-');
-      }
-      return(res);
-   }
+    for (let i = 0; i < trues.length; i++) {
+      res.push(Math.ceil(100 * trues[i] / outputs[i]) ? `${Math.ceil(100 * trues[i] / outputs[i])}%` : '-');
+    }
+    return (res);
+  };
 
-   const getMaxes = () => {
-      let serries = formatDataByDays(dataSet, date, 'serries');
+  const getMaxes = () => {
+    const serries = formatDataByDays(dataSet, date, 'serries');
 
-      serries.splice(-1, 1);
+    serries.splice(-1, 1);
 
-      serries.push(Math.max(...serries));
+    serries.push(Math.max(...serries));
 
-      return(serries);
-   }
+    return (serries);
+  };
 
-   return(
+  return (
       <article>
-         За 
+         За
          {/* {date ?  */}
             <SplitButton
-               id={`dropdown-split-variants-Secondary`}
+               id={'dropdown-split-variants-Secondary'}
                variant='Secondary'
-               title={date ? date : 'выберите дату'}
+               title={date || 'выберите дату'}
             >
-               {dates.map((el) => {
-                  return(
-                     <Dropdown.Item 
+               {dates.map((el) => (
+                     <Dropdown.Item
                         key={el}
-                        eventKey={el} 
+                        eventKey={el}
                         onSelect={(eventKey) => {
-                           setDate(eventKey);
+                          setDate(eventKey);
                         }}>
                            {el}
                      </Dropdown.Item>
-                  )
-               })}
+               ))}
             </SplitButton>
          {/* : ' краткосрочный период пока нет данных...'}      */}
 
@@ -90,39 +86,33 @@ const StatiscticsByDay = ({dataSet, dates}) => {
             <tbody>
                <tr>
                   <td>Изучено слов</td>
-                  {formatDataByDays(dataSet, date, 'learnedWords').map((el, key) => {
-                     return(
+                  {formatDataByDays(dataSet, date, 'learnedWords').map((el, key) => (
                         <td key={key}>
                            {el}{' шт.'}
                         </td>
-                     )
-                  })}
+                  ))}
                </tr>
                <tr>
                   <td>Верных ответов</td>
-                  {getPercents().map((el, key) => {
-                     return(
+                  {getPercents().map((el, key) => (
                         <td key={key}>
                            {el}
                         </td>
-                     )
-                  })}
+                  ))}
                </tr>
                <tr>
                   <td>Максимальная серия</td>
-                  {getMaxes().map((el, key) => {
-                     return(
+                  {getMaxes().map((el, key) => (
                         <td key={key}>
                            {el}{' шт.'}
                         </td>
-                     )
-                  })}
+                  ))}
                </tr>
             </tbody>
          </Table>
-         : ''}
+           : ''}
       </article>
-   )
+  );
 };
 
 export default StatiscticsByDay;

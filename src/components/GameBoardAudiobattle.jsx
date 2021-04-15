@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, {
   useState, Fragment, useEffect, useRef, useContext,
 } from 'react';
@@ -24,7 +25,7 @@ const GameBoardAudiobattle = ({
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
-        context.user.token, listWords[currentWord].id, action, null, 'game-3');
+        context.user.token, listWords[currentWord]._id, action, null, 'game-3');
     }
   };
 
