@@ -6,9 +6,9 @@ import ChooseDifficult from './ChooseDifficult';
 import GameAudiobattle from './GameAudiobattle';
 import Loader from './Loader';
 
-const Audiobattle = ({ listDictionary }) => {
+const Audiobattle = ({ listDictionary, inputDifficult = -1 }) => {
   const [listWords, setList] = useState(listDictionary || []);
-  const [difficult, setDifficult] = useState(-1);
+  const [difficult, setDifficult] = useState(inputDifficult);
 
   useEffect(() => {
     if (difficult !== -1 && !listDictionary) {

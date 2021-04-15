@@ -37,8 +37,8 @@ export default class LangApi {
     };
 
     static querys = [
+      '',
       '"userWord.difficulty":{ "$not": {"$in": ["del","success"]}}',
-      '"userWord.difficulty": {"$in": ["hard","low"]}',
       '"userWord.difficulty": {"$eq": "hard"}',
       '"userWord.difficulty": {"$in": ["del","success"]}',
       '"userWord.difficulty": {"$eq": "low"}',
@@ -61,7 +61,6 @@ export default class LangApi {
     }
 
     static getWords = (group = 0, page = 0) => {
-      console.log('a');
       let queryParam = 'words';
       if (group !== null || page !== null) {
         queryParam += '?';
@@ -191,7 +190,7 @@ export default class LangApi {
         let difficulty = (wordIsSearched && SearchedWord.difficulty !== undefined) ? SearchedWord.difficulty : 'low';
         // eslint-disable-next-line no-nested-ternary
         if (status !== null) {
-          if (status) difficulty = difficulty === 'del' ? 'low' : 'del';
+          if (status) difficulty = (difficulty === 'del' || difficulty === 'success') ? 'low' : 'del';
           else difficulty = difficulty === 'hard' ? 'low' : 'hard';
           series = 0;
           global = 0;
@@ -306,7 +305,7 @@ export default class LangApi {
       // eslint-disable-next-line max-len
       static updateGameStatistic = (userId, token, game, answersArr = null, learnedWord = false) => {
         const date = this.dateFormat(new Date());
-        this.getGameStatistic(userId, token, date)
+        this.getGameStatistic(userId, token)
           .then((statistic) => {
             if (answersArr !== null || learnedWord) {
               const data = { learnedWords: statistic.learnedWords, optional: statistic.optional };
@@ -338,7 +337,8 @@ export default class LangApi {
                 data.optional[date][game].trues = truesActual;
                 data.optional[date][game].outputsWords = outputsWords + answers;
               } else if (learnedWord) {
-                data.learnedWord += 1;
+                data.learnedWords += 1;
+                data.optional[date].learnedWords += 1;
                 data.optional[date][game].learnedWords += 1;
               }
               const url = `${this.homeApi}users/${userId}/statistics`;

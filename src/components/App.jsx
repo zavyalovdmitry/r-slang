@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import {
   Switch,
@@ -119,16 +120,16 @@ class App extends Component {
             </Route>
 
             <Route path="/selectedSavana">
-              <Savanna listDictionary={dataForGame} />
+              <Savanna listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedAudiobattle">
-              <Audiobattle listDictionary={dataForGame} />
+              <Audiobattle listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedSprint">
-              <Sprint listDictionary={dataForGame} />
+              <Sprint listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
             </Route>
             <Route path="/selectedConstructor">
-              <Constructor listDictionary={dataForGame || undefined} />
+              <Constructor listDictionary={dataForGame} inputDifficult={dataForGame ? dataForGame[0].group : -1} />
             </Route>
 
             <Route path="/statisctics">

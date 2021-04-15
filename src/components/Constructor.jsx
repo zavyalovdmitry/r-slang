@@ -8,9 +8,9 @@ import Loader from './Loader';
 
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
-const Constructor = ({ listDictionary }) => {
+const Constructor = ({ listDictionary, inputDifficult = -1 }) => {
   const [listWords, setList] = useState(listDictionary || []);
-  const [difficult, setDifficult] = useState(-1);
+  const [difficult, setDifficult] = useState(inputDifficult);
 
   const handle = useFullScreenHandle();
   const [fsMode, fsModeSet] = useState(false);

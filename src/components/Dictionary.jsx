@@ -13,14 +13,14 @@ import MenuItem from './MenuItem';
 class Dictionary extends Component {
   constructor() {
     super();
+    this.contextType = SettingsContext;
     this.state = {
       data: [],
       page: 0,
       pages: 30,
       group: 0,
       groups: 6,
-      section: 0,
-      messag: null,
+      section: 1,
     };
   }
 
@@ -54,7 +54,7 @@ class Dictionary extends Component {
             pages, groups,
           }), () => {
             if (pages[page]) this.changeGroupAndPage(group, page);
-            else this.changeGroupAndPage(group, page.indexOf(true));
+            else this.changeGroupAndPage(group, pages.indexOf(true));
           });
         },
       );
@@ -79,7 +79,7 @@ class Dictionary extends Component {
         } else {
           LangApi.getWords(group, page)
             .then((words) => words.json())
-            .then((data) => this.setState({ data, page, group }));
+            .then((data) => this.setState({ data, page, group }, () => this.dataForGame(data)));
         }
       },
     );
@@ -98,14 +98,16 @@ class Dictionary extends Component {
   changeWordStatus = (wordId, status) => {
     const { userId, token } = this.context.user;
     LangApi.updateUserWords(userId, token, wordId, null, status)
-      .then(() => this.changeGroupAndPage());
+      .then(() => {
+        this.quantityGroups(this.state.group, this.state.page);
+      });
   }
 
   dataForGame = async (data) => {
     const { length } = data;
+    const { userId, token } = this.context.user;
     if (length < 15) {
       const { section } = this.state;
-      const { userId, token } = this.context.user;
       // eslint-disable-next-line max-len
       const additionalData = await LangApi.getRandomPageForGame(userId, token, section, this.state.group, 30)
         .then((words) => {
@@ -132,10 +134,10 @@ class Dictionary extends Component {
     const auth = (userId !== null && token !== null);
 
     const sections = [
-      { title: 'слова', value: 0 },
-      { title: 'изучаемые слова', value: 1, difficulty: ['low', 'hard'] },
-      { title: 'сложные слова', value: 2, difficulty: ['hard'] },
-      { title: 'удалённые слова', value: 3, difficulty: ['del', 'success'] },
+      /* { title: 'слова', value: 0 }, */
+      { title: 'изучаемые слова', value: 1 },
+      { title: 'сложные слова', value: 2 },
+      { title: 'удалённые и изученные слова', value: 3 },
     ];
     const games = [
       {
@@ -171,7 +173,7 @@ class Dictionary extends Component {
           data={word}
           classStyle={classStyle}
           // eslint-disable-next-line no-underscore-dangle
-          changeWordStatus={this.changeWordStatus.bind(this, word._id)} />;
+          changeWordStatus={this.changeWordStatus.bind(this, (word._id || word.id))} />;
       });
     } else words = data.map((word) => <DictionaryCell key={word.id} data={word} />);
 

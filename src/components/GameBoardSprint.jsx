@@ -49,7 +49,6 @@ const GameBoardSprint = ({
   };
 
   const getNextWord = (e) => {
-    console.log(currentWord);
     if (currentWord % 10 === 0 && currentWord !== 0) {
       let indexNextPage = getRandomNumber(0, 29);
       while (arrPages.indexOf(indexNextPage) !== -1) {
@@ -58,17 +57,15 @@ const GameBoardSprint = ({
       if (context.user.userId) {
         LangApi.getRandomPageForGame(context.user.userId,
           context.user.token, 2, difficult, 30).then((words) => {
-          console.log(words.data);
           listWord.push(...words.data);
-          arrPages.push(words[0].page);
+          arrPages.push(indexNextPage);
         });
       } else {
         LangApi.getWords(difficult, indexNextPage)
           .then((data) => data.json())
           .then((words) => {
             listWord.push(...words);
-            console.log(words);
-            arrPages.push(words[0].indexNextPage);
+            arrPages.push(words[0].page);
           });
       }
     }

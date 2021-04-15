@@ -81,7 +81,7 @@ export default class DictionaryCell extends Component {
                     </button>}
                     { // eslint-disable-next-line max-len
                       deleteWordVisible.value && <button className="word-item__btn" onClick={() => action(true)}>
-                      { difficulty === 'del' ? 'return' : 'delete' }
+                      { difficulty === 'del' || difficulty === 'success' ? 'return' : 'delete' }
                       </button>}
                 </div>
             }
