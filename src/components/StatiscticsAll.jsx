@@ -1,7 +1,7 @@
 import React from 'react';
-import {VictoryChart, VictoryLine, VictoryScatter} from 'victory';
+import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
 
-import STATS from '../testData'
+import STATS from '../testData';
 
 // const data = [
 //    { x: 0, y: 0 },
@@ -13,22 +13,22 @@ import STATS from '../testData'
 //  ];
 
 const formatDataByDays = (stats) => {
-   let output = [];
-   for (let key in stats.optional) {
-      output.push({x: key, y: stats.optional[key].learnedWords})
-   };
-   return output;
-}
+  const output = [];
+  for (const key in stats.optional) {
+    output.push({ x: key, y: stats.optional[key].learnedWords });
+  }
+  return output;
+};
 
 const formatDataCumul = (stats) => {
-   let output = [];
-   let d = 0;
-   for (let key in stats.optional) {
-      d += stats.optional[key].learnedWords;
-      output.push({x: key, y: d});
-   };
-   return output;
-}
+  const output = [];
+  let d = 0;
+  for (const key in stats.optional) {
+    d += stats.optional[key].learnedWords;
+    output.push({ x: key, y: d });
+  }
+  return output;
+};
 
 const StatiscticsAll = () => (
  <article>
@@ -36,26 +36,26 @@ const StatiscticsAll = () => (
    <div className='stats-graphs-wrapper'>
       <VictoryChart>
          <VictoryLine
-            interpolation={"linear"} data={formatDataByDays(STATS)}
-            style={{ data: { stroke: "#c43a31" } }}
+            interpolation={'linear'} data={formatDataByDays(STATS)}
+            style={{ data: { stroke: '#c43a31' } }}
          />
-         <VictoryScatter 
+         <VictoryScatter
             data={formatDataByDays(STATS)}
-            style={{ data: { fill: "#c43a31" } }}
+            style={{ data: { fill: '#c43a31' } }}
          />
       </VictoryChart>
       <VictoryChart>
          <VictoryLine
-            interpolation={"linear"} data={formatDataCumul(STATS)}
-            style={{ data: { stroke: "#c43a31" } }}
+            interpolation={'linear'} data={formatDataCumul(STATS)}
+            style={{ data: { stroke: '#c43a31' } }}
          />
-         <VictoryScatter 
+         <VictoryScatter
             data={formatDataCumul(STATS)}
-            style={{ data: { fill: "#c43a31" } }}
+            style={{ data: { fill: '#c43a31' } }}
          />
       </VictoryChart>
    </div>
-   
+
  </article>
 );
 

@@ -22,7 +22,9 @@ const GameSavanna = ({ dataListWords }) => {
   return <article className="h100 game game-savanna">
     { life === 0 || isFinish ? <PopupFinishGame
     result={result}
-    restart={restart}/>
+    restart={restart}
+      wordsInGame={listWords.length}
+    />
       : <GameBoardSavanna life={life}
     dataListWords={listWords}
     changeLife={changeLife}

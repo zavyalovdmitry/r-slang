@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, {
   useState, useEffect, useContext,
 } from 'react';
@@ -23,7 +24,7 @@ const GameBoardSprint = ({
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
-        context.user.token, listWord[currentWord].id, action, null, 'game-1');
+        context.user.token, listWord[currentWord]._id, action, null, 'game-1');
     }
   };
 
@@ -48,17 +49,28 @@ const GameBoardSprint = ({
   };
 
   const getNextWord = (e) => {
+    console.log(currentWord);
     if (currentWord % 10 === 0 && currentWord !== 0) {
       let indexNextPage = getRandomNumber(0, 29);
       while (arrPages.indexOf(indexNextPage) !== -1) {
         indexNextPage = getRandomNumber(0, 29);
       }
-      LangApi.getWords(difficult, indexNextPage)
-        .then((data) => data.json())
-        .then((words) => {
-          listWord.push(...words);
+      if (context.user.userId) {
+        LangApi.getRandomPageForGame(context.user.userId,
+          context.user.token, 2, difficult, 30).then((words) => {
+          console.log(words.data);
+          listWord.push(...words.data);
           arrPages.push(words[0].page);
         });
+      } else {
+        LangApi.getWords(difficult, indexNextPage)
+          .then((data) => data.json())
+          .then((words) => {
+            listWord.push(...words);
+            console.log(words);
+            arrPages.push(words[0].indexNextPage);
+          });
+      }
     }
     setPoints(+e.target.value);
     changeCurrentWord(currentWord + 1);

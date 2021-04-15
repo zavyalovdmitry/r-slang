@@ -29,14 +29,16 @@ class App extends Component {
       user: {
         userId: null,
         token: null,
+        refreshToken: null,
       },
+      dataForGame: null,
     };
   }
 
   componentDidMount = () => {
     if (sessionStorage.getItem('auth') !== null) {
-      const { userId, token } = JSON.parse(sessionStorage.getItem('auth'));
-      this.SetlogInUser(userId, token);
+      const { userId, token, refreshToken } = JSON.parse(sessionStorage.getItem('auth'));
+      this.SetlogInUser(userId, token, refreshToken);
     }
   }
 
@@ -76,13 +78,18 @@ class App extends Component {
     }));
   }
 
-  SetlogInUser = (userId, token) => {
-    this.setState({ user: { userId, token } });
+  SetlogInUser = (userId, token, refreshToken) => {
+    this.setState({ user: { userId, token, refreshToken } });
+  }
+
+  setDataForGame = (dataForGame) => {
+    this.setState({ dataForGame });
   }
 
   render = () => {
     const {
-      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible, user,
+      // eslint-disable-next-line max-len
+      wordTranslateVisible, textTranslateVisible, deleteWordVisible, hardWordVisible, user, dataForGame,
     } = this.state;
     wordTranslateVisible.action = this.changeWordTranslate;
     textTranslateVisible.action = this.changeTextTranslate;
@@ -91,53 +98,68 @@ class App extends Component {
     user.logIn = this.SetlogInUser;
 
     return (
-    <SettingsContext.Provider
+      <SettingsContext.Provider
         value={{
           wordTranslateVisible,
           textTranslateVisible,
           deleteWordVisible,
           hardWordVisible,
           user,
+          setDataForGame: this.setDataForGame,
         }}
       >
-    <Header/>
-    <main>
-      <Switch>
-        <Route path="/dictionary">
-          <Dictionary/>
-        </Route>
-        <Route path="/savana">
-          <Savanna/>
-        </Route>
-        <Route path="/statisctics">
-          <Statisctics/>
-        </Route>
-        <Route path="/audiobattle">
-          <Audiobattle/>
-        </Route>
-        <Route path="/sprint">
-          <Sprint/>
-        </Route>
-        <Route path="/constructor">
-          <Constructor/>
-        </Route>
-        <Route exact path="/register" component={Register}>
-          {/* <Register/> */}
-        </Route>
-        <Route exact path="/auth" component={Login}>
-          {/* <Login/> */}
-        </Route>
-        <Route exact path="/profile" component={Profile}>
-          {/* <Profile/> */}
-        </Route>
-        <Route path="/main">
-          <Main/>
-        </Route>
-        <Redirect from='/' to='/main' />
-      </Switch>
-    </main>
-    <Footer/>
-  </SettingsContext.Provider>);
+        <Header />
+        <main>
+          <Switch>
+            <Route path="/dictionary">
+              <Dictionary />
+            </Route>
+            <Route path="/savana">
+              <Savanna />
+            </Route>
+
+            <Route path="/selectedSavana">
+              <Savanna listDictionary={dataForGame} />
+            </Route>
+            <Route path="/selectedAudiobattle">
+              <Audiobattle listDictionary={dataForGame} />
+            </Route>
+            <Route path="/selectedSprint">
+              <Sprint listDictionary={dataForGame} />
+            </Route>
+            <Route path="/selectedConstructor">
+              <Constructor listDictionary={dataForGame || undefined} />
+            </Route>
+
+            <Route path="/statisctics">
+              <Statisctics />
+            </Route>
+            <Route path="/audiobattle">
+              <Audiobattle />
+            </Route>
+            <Route path="/sprint">
+              <Sprint />
+            </Route>
+            <Route path="/constructor">
+              <Constructor />
+            </Route>
+            <Route exact path="/register" component={Register}>
+              {/* <Register/> */}
+            </Route>
+            <Route exact path="/auth" component={Login}>
+              {/* <Login/> */}
+            </Route>
+            <Route exact path="/profile" component={Profile}>
+              {/* <Profile/> */}
+            </Route>
+            <Route path="/">
+              <Main />
+            </Route>
+            <Redirect from='/' to='/main' />
+          </Switch>
+        </main>
+        <Footer />
+      </SettingsContext.Provider>);
   }
 }
 

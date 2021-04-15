@@ -33,7 +33,7 @@ export default function WordsNav(props) {
 }
 
 WordsNav.propTypes = {
-  quantity: (PropTypes.number || PropTypes.array),
+  quantity: (PropTypes.array || PropTypes.number),
   changeVal: PropTypes.func.isRequired,
   classString: PropTypes.string,
   active: PropTypes.number.isRequired,

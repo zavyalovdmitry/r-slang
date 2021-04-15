@@ -11,3 +11,12 @@ export const playSound = (path) => {
 };
 
 export const PATH_API = 'https://react-rs-lang.herokuapp.com/';
+
+export const shuffle = (array) => {
+  const newArr = array;
+  for (let i = array.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import LangApi from './LangApi';
@@ -6,6 +7,8 @@ import WordsNav from './WordsNav';
 import Settings from './Settings';
 import SettingsContext from './SettingsContext';
 import Loader from './Loader';
+import { shuffle } from '../utils';
+import MenuItem from './MenuItem';
 
 class Dictionary extends Component {
   constructor() {
@@ -47,7 +50,9 @@ class Dictionary extends Component {
     LangApi.groupCount(userId, token, group, this.state.section)
       .then(
         (pages) => {
-          this.setState(() => ({ pages, groups, data: [] }), () => {
+          this.setState(() => ({
+            pages, groups,
+          }), () => {
             if (pages[page]) this.changeGroupAndPage(group, page);
             else this.changeGroupAndPage(group, page.indexOf(true));
           });
@@ -61,21 +66,23 @@ class Dictionary extends Component {
     const { section } = this.state;
     const { userId, token } = this.context.user;
     const auth = (userId !== null && token !== null);
-    this.setState({ page, group, data: [] }, () => {
-      if (auth) {
-        LangApi.getUserWordsWithFilter(userId, token, section, group, page)
-          .then(
-            (words) => {
+    this.setState(
+      { page, group, data: [] },
+      () => {
+        if (auth) {
+          LangApi.getUserWordsWithFilter(userId, token, section, group, page)
+            .then((words) => {
               const { data } = words;
+              if (section !== 3) this.dataForGame(data);
               this.setState({ data });
-            },
-          );
-      } else {
-        LangApi.getWords(group, page)
-          .then((words) => words.json())
-          .then((data) => this.setState({ data, page, group }));
-      }
-    });
+            });
+        } else {
+          LangApi.getWords(group, page)
+            .then((words) => words.json())
+            .then((data) => this.setState({ data, page, group }));
+        }
+      },
+    );
   }
 
   changeSection = (section) => {
@@ -94,6 +101,32 @@ class Dictionary extends Component {
       .then(() => this.changeGroupAndPage());
   }
 
+  dataForGame = async (data) => {
+    const { length } = data;
+    if (length < 15) {
+      const { section } = this.state;
+      const { userId, token } = this.context.user;
+      // eslint-disable-next-line max-len
+      const additionalData = await LangApi.getRandomPageForGame(userId, token, section, this.state.group, 30)
+        .then((words) => {
+          if (words.data) {
+            const addData = words.data;
+            const dataId = [];
+            addData.forEach((element) => {
+              dataId.push(element._id);
+            });
+            // eslint-disable-next-line max-len
+            data.forEach((element) => (!dataId.includes(element._id) ? addData.push(element) : false));
+            return addData;
+          }
+          return false;
+        });
+      if (additionalData) return this.context.setDataForGame(shuffle(additionalData));
+      return this.context.setDataForGame(shuffle(data));
+    }
+    return this.context.setDataForGame(shuffle(data));
+  }
+
   render = () => {
     const { userId, token } = this.context.user;
     const auth = (userId !== null && token !== null);
@@ -104,6 +137,25 @@ class Dictionary extends Component {
       { title: 'сложные слова', value: 2, difficulty: ['hard'] },
       { title: 'удалённые слова', value: 3, difficulty: ['del', 'success'] },
     ];
+    const games = [
+      {
+        name: 'Спринт',
+        link: 'selectedSprint',
+      },
+      {
+        name: 'Саванна',
+        link: '/selectedSavana',
+      },
+      {
+        name: 'Аудиовызов',
+        link: '/selectedAudiobattle',
+      },
+      {
+        name: 'Конструктор',
+        link: 'selectedConstructor',
+      },
+    ];
+    const menuGames = games.map((el, index) => (<MenuItem key={`g-${index}`} dataLink={el} />));
 
     const {
       data, page, group, section,
@@ -116,34 +168,42 @@ class Dictionary extends Component {
         const classStyle = difficulty;
         // eslint-disable-next-line no-underscore-dangle
         return <DictionaryCell key={word._id}
-                              data={word}
-                              classStyle={classStyle}
-                              // eslint-disable-next-line no-underscore-dangle
-                              changeWordStatus = {this.changeWordStatus.bind(this, word._id) } />;
+          data={word}
+          classStyle={classStyle}
+          // eslint-disable-next-line no-underscore-dangle
+          changeWordStatus={this.changeWordStatus.bind(this, word._id)} />;
       });
-    } else words = data.map((word) => <DictionaryCell key={word.id} data={word}/>);
+    } else words = data.map((word) => <DictionaryCell key={word.id} data={word} />);
 
     return <article>
+      <button onClick={this.dataForGame}>try</button>
       {this.state.data.length ? <Fragment>
         <Settings />
-        {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
-        {section < 6
-        && <Fragment>
-              <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
-              <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
-            </Fragment>}
+        {auth && <WordsNav navData={sections} active={section} classString="sections" changeVal={this.changeSection} />}
+        <Fragment>
+          <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+          <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+        </Fragment>
+
+        {(section < 3 && data.length > 0)
+          && <Fragment>
+              <ul className='nav-dictionary bg-black'>
+                {menuGames}
+              </ul>
+          </Fragment>
+        }
+
         <div className={`words-wrap group-${group}`}>
           {words}
         </div>
-        {auth && <WordsNav navData={sections} active ={section} classString="sections" changeVal={this.changeSection} />}
-        {section < 6
-        && <Fragment>
-              <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
-              <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
-            </Fragment>}
+        <Fragment>
+          <WordsNav quantity={this.state.pages} active={page} classString="page" changeVal={this.changeGroupAndPage.bind(this, this.state.group)} />
+          <WordsNav quantity={this.state.groups} active={group} classString="group" changeVal={this.changeGroupAndPage} />
+        </Fragment>
+        {auth && <WordsNav navData={sections} active={section} classString="sections" changeVal={this.changeSection} />}
       </Fragment>
-        : <Loader/>}
-      </article>;
+        : <Loader />}
+    </article>;
   }
 }
 

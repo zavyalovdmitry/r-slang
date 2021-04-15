@@ -1,3 +1,5 @@
+import { getRandomNumber } from '../utils';
+
 export default class LangApi {
     static homeApi='https://react-rs-lang.herokuapp.com/';
 
@@ -25,12 +27,12 @@ export default class LangApi {
       return optional;
     }
 
-    static statisticExample = (date) => {
+    static statisticExample = () => {
       const data = {
         learnedWords: 0,
         optional: {},
       };
-      data.optional[data] = this.optionalStatisticsExample(date);
+      data.optional[this.dateFormat(new Date())] = this.optionalStatisticsExample();
       return data;
     };
 
@@ -39,6 +41,7 @@ export default class LangApi {
       '"userWord.difficulty": {"$in": ["hard","low"]}',
       '"userWord.difficulty": {"$eq": "hard"}',
       '"userWord.difficulty": {"$in": ["del","success"]}',
+      '"userWord.difficulty": {"$eq": "low"}',
     ];
 
     static queryIn = (array) => `{"$in": [${array.join(',')}]}`;
@@ -58,6 +61,7 @@ export default class LangApi {
     }
 
     static getWords = (group = 0, page = 0) => {
+      console.log('a');
       let queryParam = 'words';
       if (group !== null || page !== null) {
         queryParam += '?';
@@ -106,12 +110,12 @@ export default class LangApi {
         });
     }
 
-    static getUserWordsWithFilter = (userId, token, qry = 0, group = null, page = 0) => {
+    // eslint-disable-next-line max-len
+    static getUserWordsWithFilter = (userId, token, qry = 0, group = null, page = 0, pageOfAll = false, perPage = 20) => {
       const chosenGroup = group === null ? '' : `group=${group}&`;
-      const queryForPageOfAll = qry !== 5;
-      const query = queryForPageOfAll ? encodeURIComponent(this.queryAnd([this.querys[qry], `"page": ${this.queryEq(page)}`])) : encodeURIComponent(`{${this.querys[qry]}}`);
-      const pageOfResult = queryForPageOfAll ? '' : `page=${page}&`;
-      const url = `${this.homeApi}users/${userId}/aggregatedWords?${chosenGroup}${pageOfResult}wordsPerPage=20&filter=${query}`;
+      const query = !pageOfAll ? encodeURIComponent(this.queryAnd([this.querys[qry], `"page": ${this.queryEq(page)}`])) : encodeURIComponent(`{${this.querys[qry]}}`);
+      const pageOfResult = !pageOfAll ? '' : `page=${page}&`;
+      const url = `${this.homeApi}users/${userId}/aggregatedWords?${chosenGroup}${pageOfResult}wordsPerPage=${perPage}&filter=${query}`;
       return fetch(url,
         {
           method: 'GET',
@@ -123,10 +127,51 @@ export default class LangApi {
         })
         .then((data) => data.json())
         .then((words) => {
-          const pageCount = 0;
+          /* const pageCount = Math.ceil(words[0].totalCount[0].count / perPage); */
           const data = words[0].paginatedResults;
-          return { pages: pageCount, data };
+          const dataQuantity = words[0].totalCount[0] ? words[0].totalCount[0].count : 0;
+          return { /* pages: pageCount, */ data, dataQuantity };
         });
+    }
+
+    static getRandomPageForGame = async (userId, token, qry = 0, group = null, perPage = 15) => {
+      const selectedGroup = qry !== 2 ? group : null;
+      // eslint-disable-next-line no-return-await
+      return await this.getUserWordsWithFilter(userId, token, qry, selectedGroup, 0, true, perPage)
+        .then(
+          async (dataCheck) => {
+            const { dataQuantity } = dataCheck;
+            if (qry === 2 && dataQuantity < perPage) {
+              const additionalDates = perPage - dataQuantity;
+              // eslint-disable-next-line max-len
+              const retData = await Promise.all(
+                [
+                  dataQuantity
+                    // eslint-disable-next-line max-len
+                    ? this.getUserWordsWithFilter(userId, token, qry, selectedGroup, 0, true, perPage)
+                    : [],
+                  // eslint-disable-next-line max-len
+                  this.getUserWordsWithFilter(userId, token, 4, selectedGroup, 0, true, additionalDates)
+                    .then((secondDataCheck) => {
+                      if (secondDataCheck.dataQuantity === 0) return false;
+                      // eslint-disable-next-line max-len
+                      const page = getRandomNumber(0, Math.ceil(secondDataCheck.dataQuantity / additionalDates) - 1);
+                      // eslint-disable-next-line max-len
+                      return this.getUserWordsWithFilter(userId, token, 4, selectedGroup, page, true, additionalDates);
+                    }),
+                ],
+              );
+              // eslint-disable-next-line no-nested-ternary
+              const returnData = retData[0]
+                ? (retData[1] ? retData[0].data.concat(retData[1].data) : retData[0].data)
+                : (retData[1] ? retData[1].data : false);
+              return { data: returnData };
+            }
+            const page = getRandomNumber(0, Math.ceil(dataCheck.dataQuantity / perPage) - 1);
+            // eslint-disable-next-line max-len
+            return this.getUserWordsWithFilter(userId, token, qry, selectedGroup, page, true, perPage);
+          },
+        );
     }
 
     // eslint-disable-next-line max-len
@@ -237,7 +282,7 @@ export default class LangApi {
         return `${this.homeApi}users/${userId}/aggregatedWords?${grQuery}&wordsPerPage=1&filter=${filter}`;
       }
 
-      static getGameStatistic = (userId, token, date = this.dateFormat(new Date())) => {
+      static getGameStatistic = (userId, token) => {
         const url = `${this.homeApi}users/${userId}/statistics`;
         return fetch(url, {
           method: 'GET',
@@ -250,13 +295,13 @@ export default class LangApi {
           .then(
             (data) => {
               if (data.status === 200) return data.json();
-              const ret = this.statisticExample(date);
+              const ret = this.statisticExample();
               return ret;
             },
           );
       }
 
-      static dateFormat = (date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+      static dateFormat = (date) => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
       // eslint-disable-next-line max-len
       static updateGameStatistic = (userId, token, game, answersArr = null, learnedWord = false) => {

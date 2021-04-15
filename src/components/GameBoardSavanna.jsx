@@ -31,7 +31,8 @@ const GameBoardSavanna = ({
   const changeStatistics = (action) => {
     if (context.user.userId) {
       LangApi.updateUserWords(context.user.userId,
-        context.user.token, listWords[currentWord].id, action, null, 'game-2');
+        // eslint-disable-next-line no-underscore-dangle
+        context.user.token, listWords[currentWord]._id, action, null, 'game-2');
     }
   };
 
@@ -68,11 +69,12 @@ const GameBoardSavanna = ({
     }
     changeList();
   };
-
+  const quantity = listWords.length;
   const getVariants = () => {
     const variantsList = new Set([currentWord]);
-    while (variantsList.size < 4) {
-      variantsList.add(getRandomNumber(0, 19));
+    const goal = quantity > 3 ? 4 : quantity;
+    while (variantsList.size < goal) {
+      variantsList.add(getRandomNumber(0, quantity - 1));
     }
     const arrVariants = shuffleArray(Array.from(variantsList));
     return arrVariants.map((el, index) => <button
