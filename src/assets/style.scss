@@ -1389,3 +1389,18 @@ footer {
   align-items: center;
 }
 
+.gameResults {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.gameResult {
+  border: 1px solid black;
+  border-radius: 3px;
+  margin: 2px;
+  padding: 2px;
+  box-sizing: border-box;
+}
