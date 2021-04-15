@@ -10,7 +10,7 @@ const GameBoardConstructor = ({
   dataListWords, setFinish, setResult, arrPagesInGame, difficult,
 }) => {
   const [currentWord, changeCurrentWord] = useState(0);
-  const [time, setTime] = useState(60);
+  const [time, setTime] = useState(90);
   const [result, changeRightAnswer] = useState(0);
   const [indexTranslate, setIndexTranslate] = useState(0);
   const [points, setPointsValue] = useState(0);
@@ -42,11 +42,11 @@ const GameBoardConstructor = ({
     )
   }
 
-  useEffect(() => {
-    document.addEventListener('keydown', 
-      (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
-    );
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener('keydown', 
+  //     (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
+  //   );
+  // }, []);
 
   const changeStatistics = (action) => {
     if (context.user.userId) {
@@ -57,9 +57,8 @@ const GameBoardConstructor = ({
 
   const checkLetter = (letter) => {
     return(
-            (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
-            (listWord[currentWord].word.split('').filter((el) => el === letter).length >
-            currentUserWord.filter((el) => el === letter).length)
+            listWord[currentWord].word.split('').filter((el) => el === letter).length >
+            currentUserWord.filter((el) => el === letter).length
     );
   }
 
@@ -150,6 +149,7 @@ const GameBoardConstructor = ({
     <div className="game-sprint__board-inner">
       <p className="game-sprint__points">{points}</p>
       <p className="game-sprint__plus">+{arrPages.length * 10} очков за слово</p>
+      <p className="game-sprint__plus">двойной клик для перехода в полный экран</p>
       <div className="game-sprint__words-block">
         <p className="game-sprint__translate">{listWord[currentWord].wordTranslate}</p>
         <p className="game-sprint__equal">=</p>

@@ -16,10 +16,12 @@ export default class Profile extends Component {
   static contextType = SettingsContext;
 
   logOut = () => {
-    sessionStorage.clear();
-    // sessionStorage.removeItem('auth');
+    // sessionStorage.clear();
+    sessionStorage.removeItem('auth');
     this.props.history.push("/");
     window.location.reload();
+    // this.context.user.userId
+    // this.context.user.token
   }
 
   getUserData = () => {

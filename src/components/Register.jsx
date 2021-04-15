@@ -39,10 +39,11 @@ const vusername = value => {
 };
 
 const vpassword = value => {
-  if (value.length < 6 || value.length > 40) {
+  // if ((value.length < 6 || value.length > 40) && ()) {
+  if (!(/^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{6,40}$/.test(value))) {
     return (
       <div className="alert alert-danger" role="alert">
-        Пароль должен содержать от 6 да 40 символов.
+        Пароль должен содержать от 6 да 40 символов и состоять из букв и цифр.
       </div>
     );
   }
