@@ -136,7 +136,7 @@ class App extends Component {
         <Redirect from='/' to='/main' />
       </Switch>
     </main>
-    <Footer/>
+      <Footer/>
   </SettingsContext.Provider>);
   }
 }
