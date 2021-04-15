@@ -22,28 +22,30 @@ const formatDataCumul = (stats) => {
 const StatiscticsAll = ({dataSet}) => (
  <article>
     За весь период обучения
-   <div className='stats-graphs-wrapper'>
-      <VictoryChart>
-         <VictoryLine
-            interpolation={"linear"} data={formatDataByDays(dataSet)}
-            style={{ data: { stroke: "#c43a31" } }}
-         />
-         <VictoryScatter 
-            data={formatDataByDays(dataSet)}
-            style={{ data: { fill: "#c43a31" } }}
-         />
-      </VictoryChart>
-      <VictoryChart>
-         <VictoryLine
-            interpolation={"linear"} data={formatDataCumul(dataSet)}
-            style={{ data: { stroke: "#c43a31" } }}
-         />
-         <VictoryScatter 
-            data={formatDataCumul(dataSet)}
-            style={{ data: { fill: "#c43a31" } }}
-         />
-      </VictoryChart>
-   </div>
+   {formatDataByDays(dataSet).length !== 1 ? 
+      <div className='stats-graphs-wrapper'>
+         <VictoryChart>
+            <VictoryLine
+               interpolation={"linear"} data={formatDataByDays(dataSet)}
+               style={{ data: { stroke: "#c43a31" } }}
+            />
+            <VictoryScatter 
+               data={formatDataByDays(dataSet)}
+               style={{ data: { fill: "#c43a31" } }}
+            />
+         </VictoryChart>
+         <VictoryChart>
+            <VictoryLine
+               interpolation={"linear"} data={formatDataCumul(dataSet)}
+               style={{ data: { stroke: "#c43a31" } }}
+            />
+            <VictoryScatter 
+               data={formatDataCumul(dataSet)}
+               style={{ data: { fill: "#c43a31" } }}
+            />
+         </VictoryChart>
+      </div>
+   : ' пока нет данных...'}
    
  </article>
 );

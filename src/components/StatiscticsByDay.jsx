@@ -55,24 +55,26 @@ const StatiscticsByDay = ({dataSet, dates}) => {
    return(
       <article>
          За 
-         <SplitButton
-            id={`dropdown-split-variants-Secondary`}
-            variant='Secondary'
-            title={date ? date : 'выберите дату'}
-         >
-            {dates.map((el) => {
-               return(
-                  <Dropdown.Item 
-                     key={el}
-                     eventKey={el} 
-                     onSelect={(eventKey) => {
-                        setDate(eventKey);
-                     }}>
-                        {el}
-                  </Dropdown.Item>
-               )
-            })}
-         </SplitButton>
+         {/* {date ?  */}
+            <SplitButton
+               id={`dropdown-split-variants-Secondary`}
+               variant='Secondary'
+               title={date ? date : 'выберите дату'}
+            >
+               {dates.map((el) => {
+                  return(
+                     <Dropdown.Item 
+                        key={el}
+                        eventKey={el} 
+                        onSelect={(eventKey) => {
+                           setDate(eventKey);
+                        }}>
+                           {el}
+                     </Dropdown.Item>
+                  )
+               })}
+            </SplitButton>
+         {/* : ' краткосрочный период пока нет данных...'}      */}
 
          {date ? <Table striped bordered hover>
             <thead>
