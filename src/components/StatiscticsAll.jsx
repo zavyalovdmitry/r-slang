@@ -1,7 +1,7 @@
 import React from 'react';
 import {VictoryChart, VictoryLine, VictoryScatter} from 'victory';
 
-import STATS from '../testData'
+// import STATS from '../testData'
 
 // const data = [
 //    { x: 0, y: 0 },
@@ -30,27 +30,27 @@ const formatDataCumul = (stats) => {
    return output;
 }
 
-const StatiscticsAll = () => (
+const StatiscticsAll = ({dataSet}) => (
  <article>
     За весь период обучения
    <div className='stats-graphs-wrapper'>
       <VictoryChart>
          <VictoryLine
-            interpolation={"linear"} data={formatDataByDays(STATS)}
+            interpolation={"linear"} data={formatDataByDays(dataSet)}
             style={{ data: { stroke: "#c43a31" } }}
          />
          <VictoryScatter 
-            data={formatDataByDays(STATS)}
+            data={formatDataByDays(dataSet)}
             style={{ data: { fill: "#c43a31" } }}
          />
       </VictoryChart>
       <VictoryChart>
          <VictoryLine
-            interpolation={"linear"} data={formatDataCumul(STATS)}
+            interpolation={"linear"} data={formatDataCumul(dataSet)}
             style={{ data: { stroke: "#c43a31" } }}
          />
          <VictoryScatter 
-            data={formatDataCumul(STATS)}
+            data={formatDataCumul(dataSet)}
             style={{ data: { fill: "#c43a31" } }}
          />
       </VictoryChart>

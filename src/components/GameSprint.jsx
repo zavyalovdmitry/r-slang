@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { PropTypes } from 'prop-types';
 import PopupFinishGame from './PopupFinishGame';
 import GameBoardSprint from './GameBoardSprint';
 import LangApi from './LangApi';
 import { getRandomNumber } from '../utils';
 import Loader from './Loader';
+import SettingsContext from './SettingsContext';
 
 const GameSprint = ({ dataListWords, difficult }) => {
   const [isFinish, setFinish] = useState(false);
@@ -14,6 +15,8 @@ const GameSprint = ({ dataListWords, difficult }) => {
 
   const [pointsSeries, updatePointsSeries] = useState([]);
   const [listWord, setListWord] = useState([]);
+
+  const context = useContext(SettingsContext);
 
   let listWords = JSON.parse(JSON.stringify(dataListWords));
   const [arrPagesInGame, changeArrPages] = useState([listWords[0].page]);
@@ -50,6 +53,7 @@ const GameSprint = ({ dataListWords, difficult }) => {
       }
       return <Loader/>;
     }
+    LangApi.updateGameStatistic(context.user.userId, context.user.token, 'game-1', pointsSeries);
     return <PopupFinishGame
     wordsInGame={wordsInGame}
     result={result}
