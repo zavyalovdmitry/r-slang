@@ -4,20 +4,10 @@ import StatiscticsAll from './StatiscticsAll';
 import LangApi from './LangApi';
 import SettingsContext from './SettingsContext';
 
-// import STATS from'../testData'
-// getGameStatistic(userId, token)
-
-
 const Statisctics = () => {
    const [data, setData] = useState({});
    const [dates, setDates] = useState([]);
    const context = useContext(SettingsContext);
-
-   // const loadStats = async() => {
-   //    const dataSet = LangApi.getGameStatistic(context.user.userId, context.user.token);
-   //    const datas = await dataSet;  
-   //    setData(datas);
-   // }
 
    const getDates = (stats) => {
       let output = [];
@@ -32,16 +22,12 @@ const Statisctics = () => {
          .then((datas) =>  {  
             setData(datas);   
          });
-      // setDates(getDates(data));
-      // loadStats();
    }, [])
 
    useEffect(() => {
       setDates(getDates(data));
-      // loadStats();
    }, [data])
 
-   // console.log(data)
    return <div className="statistics-wrapper">
       <StatiscticsByDay dataSet={data} dates={dates}/>
       <StatiscticsAll dataSet={data} /> 

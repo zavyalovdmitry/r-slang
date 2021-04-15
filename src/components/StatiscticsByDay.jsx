@@ -4,18 +4,8 @@ import React, {
 import Table from 'react-bootstrap/Table';
 import Dropdown from 'react-bootstrap/Dropdown';
 import SplitButton from 'react-bootstrap/SplitButton';
-// import STATS from '../testData';
-
-// const getDates = (stats) => {
-//    let output = [];
-//    for (let key in stats.optional) {
-//       output.push(key)
-//    };
-//    return output;
-// }
 
 const StatiscticsByDay = ({dataSet, dates}) => {
-   // const dates = getDates(dataSet);
    const [date, setDate] = useState('');
    
    useEffect(() => {

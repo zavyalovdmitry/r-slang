@@ -42,12 +42,6 @@ const GameBoardConstructor = ({
     )
   }
 
-
-
-  // LangApi.updateGameStatistic(userId, token, 'game-4', [false, true, true, true, true, false, true])
-
-
-
   // useEffect(() => {
   //   document.addEventListener('keydown', 
   //     (e) => checkLetter(e.key) ? addLetter(e, e.key) : null
@@ -63,9 +57,8 @@ const GameBoardConstructor = ({
 
   const checkLetter = (letter) => {
     return(
-            // (listWord[currentWord].word.split('').filter((el) => el === letter).length) &&
-            (listWord[currentWord].word.split('').filter((el) => el === letter).length >
-            currentUserWord.filter((el) => el === letter).length)
+            listWord[currentWord].word.split('').filter((el) => el === letter).length >
+            currentUserWord.filter((el) => el === letter).length
     );
   }
 
