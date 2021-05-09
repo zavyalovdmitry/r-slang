@@ -6,11 +6,11 @@ export const shuffleArray = (array) => {
 };
 
 export const playSound = (path) => {
-  const sound = new Audio(`https://react-rs-lang.herokuapp.com/${path}`);
+  const sound = new Audio(`https://zavyalovdmitry-rslang.herokuapp.com/${path}`);
   sound.play();
 };
 
-export const PATH_API = 'https://react-rs-lang.herokuapp.com/';
+export const PATH_API = 'https://zavyalovdmitry-rslang.herokuapp.com/';
 
 export const shuffle = (array) => {
   const newArr = array;

@@ -1,7 +1,7 @@
 import { getRandomNumber } from '../utils';
 
 export default class LangApi {
-    static homeApi='https://react-rs-lang.herokuapp.com/';
+    static homeApi='https://zavyalovdmitry-rslang.herokuapp.com/';
 
     static userApiReg = 'users';
 
@@ -51,7 +51,7 @@ export default class LangApi {
     static queryEq = (value) => `{ "$eq": ${value}}`;
 
     static queryAnd = (array) => `{"$and":[{${array.join(',')}}]}`
-
+// ===============================
     static getWordById = (id, func) => {
       if (id !== null) {
         let queryParam = 'words';
@@ -84,6 +84,9 @@ export default class LangApi {
 
     static getUserInfo = async (userId, token) => {
       const url = `${this.homeApi}users/${userId}`;
+
+      // console.log(token);
+
       return fetch(url,
         {
           method: 'GET',
