@@ -27,7 +27,7 @@ module.exports = {
   plugins: [
     new CaseSensitivePathsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    // new ESLintPlugin(),
+    new ESLintPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html'
     }),

@@ -5,10 +5,9 @@ import 'assets/style.scss';
 import { HashRouter } from 'react-router-dom';
 import 'regenerator-runtime/runtime';
 
-
 ReactDOM.render(
   <HashRouter>
-      <App />
+    <App />
   </HashRouter>,
   document.querySelector('#root'),
 );

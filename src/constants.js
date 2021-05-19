@@ -1,48 +1,48 @@
 const MENU = [
   {
     name: 'Главная',
-    link: '/main',
+    link: '/main'
   },
   {
     name: 'Учебник',
-    link: '/dictionary',
+    link: '/dictionary'
   },
   {
     name: 'Спринт',
-    link: '/sprint',
+    link: '/sprint'
   },
   {
     name: 'Саванна',
-    link: '/savana',
+    link: '/savana'
   },
   {
     name: 'Аудиовызов',
-    link: '/audiobattle',
+    link: '/audiobattle'
   },
   {
     name: 'Конструктор',
-    link: '/constructor',
+    link: '/constructor'
   },
   {
     name: 'Статистика',
     link: '/statisctics',
-    isUsers: true,
+    isUsers: true
   },
   {
     name: 'Профиль',
     link: '/profile',
-    isUsers: true,
+    isUsers: true
   },
   {
     name: 'Вход',
     link: '/auth',
-    isAuth: true,
+    isAuth: true
   },
   {
     name: 'Регистрация',
     link: '/register',
-    isAuth: true,
-  },
+    isAuth: true
+  }
 ];
 
 export default MENU;

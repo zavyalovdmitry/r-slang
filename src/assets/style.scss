@@ -29,7 +29,6 @@ main {
 
 article.h100 {
   height: calc(100vh - 125px);
-  // height: 100%;
 }
 
 button {
@@ -61,7 +60,6 @@ button {
     min-height: calc(100vh - 300px);
   }
 }
-/*header*/
 
 .logo {
   width: 300px;
@@ -160,7 +158,6 @@ button {
     height: 300px;
   }
 }
-/*banner*/
 
 .banner {
   display: flex;
@@ -237,6 +234,7 @@ button {
     }
   }
 }
+
 @media(max-width:992px) {
   .banner {
     height: calc(100vh - 209px);
@@ -247,8 +245,6 @@ button {
   0%   { transform: translate(0, 0); }
   100% { transform: translate(0, 20px); }
 }
-
-/*footer*/
 
 footer {
   display: flex;
@@ -269,8 +265,6 @@ footer {
   display: flex;
   flex-direction: column;
 }
-
-/*advantages*/
 
 .advantages {
   padding: 50px 20px;
@@ -342,8 +336,6 @@ footer {
     font-size: 18px;
   }
 }
-
-/*whowe*/
 
 .whowe {
   padding: 50px 20px;
@@ -452,8 +444,6 @@ footer {
   }
 }
 
-/*video*/
-
 .video {
   padding: 50px 20px;
 }
@@ -511,8 +501,6 @@ footer {
   }
 }
 
-/*choose-difficult*/
-
 .choose-difficult {
   display: flex;
   flex-direction: column;
@@ -562,8 +550,6 @@ footer {
   width: 100%;
   height: 100%;
 }
-
-/*game-savanna*/
 
 .game-savanna {
   background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
@@ -637,7 +623,7 @@ footer {
     }
   }
 }
-/*game-audio*/
+
 .game-audio {
   background-color: #85FFBD;
   background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
@@ -788,7 +774,6 @@ footer {
     object-fit: contain;
   }
 }
-/*game=sprint*/ 
 
 .game-sprint {
   position: relative;
@@ -883,8 +868,6 @@ footer {
   }
 }
 
-/*timer*/
-
 .timer {
   position: absolute;
   top: 50px;
@@ -907,7 +890,6 @@ footer {
   }
 }
 
-/*finish-popup*/
 .finish-block {
   display: flex;
   flex-direction: column;
@@ -943,7 +925,6 @@ footer {
   }
 }
 
-/*loader*/
 :root
 {
 	--duration: 1.5s;
@@ -1040,10 +1021,6 @@ footer {
 	}
 }
 
-
-
-
-
 .card-container {
   width: 300px;
 }
@@ -1067,21 +1044,11 @@ footer {
   border-color: black;
 }
 
-// .btn-primary-active {
-//   color: #fff;
-//   background-color: black;
-//   border-color: black;  
-// }
-
 .menu-link,
 .menu-link:hover {
   text-decoration: none;
   color: white;
 }
-
-/*dictionary*/
-
-
 
 .nav-dictionary {
   display: flex;
@@ -1264,74 +1231,52 @@ footer {
   }
 }
 
-
-
-
 .game-constructor {
   background-image: linear-gradient(to top, #4615b8 0%, #58be39 100%);
+
+  &__alphBoard-btn {
+    margin: .34em;
+    font-size: 1.4em;
+    display: inline-block;
+    padding: .3em .7em;
+    color: #066c99;
+    border: 1px solid;
+    border-color: #ddd #ccc #ccc #ddd;
+    border-radius: 3px;
+    white-space: nowrap;
+    background-clip: padding-box;
+    cursor: default;
+    width: 3.5em;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+
+    &.outgame {
+      color: gray;
+      opacity:0.5;
+      background-color: #fff;
+    }
+
+    &.active {
+      color: black;
+      background-color: green;
+      cursor: pointer;
+
+      &:hover{
+        background-color: #fff;
+        transition: 0.5s;
+      }
+    }
+
+    &.used {
+      color: gray;
+      border-color: rgb(240, 10, 10);
+      cursor: default;
+    }
+  }
 }
-
-.game-constructor__alphBoard-btn {
-  margin: .34em;
-  font-size: 1.4em;
-
-  display: inline-block;
-  padding: .3em .7em;
-  color: #066c99;
-  border: 1px solid;
-  border-color: #ddd #ccc #ccc #ddd;
-  border-radius: 3px;
-  white-space: nowrap;
-  background-clip: padding-box;
-  cursor: default;
-
-  width: 3.5em;
-  // height: 2em;
-  // height: 5em;
-  padding-left: 0;
-  padding-right: 0;
-  text-align: center;
-  text-transform: uppercase;
-
-  transition: 0.5s;
-}
-
-// .game-constructor__alphBoard-btn:hover{
-//   // font-size: 1.8em;
-//   background-color: #fff;
-//   transition: 0.5s;
-// }
-
-// .game-constructor__alphBoard-btn .outgame {
-.game-constructor__alphBoard-btn.outgame {
-  color: gray;
-  opacity:0.5;
-  background-color: #fff;
-}
-
-// .game-constructor__alphBoard-btn 
-.game-constructor__alphBoard-btn.active {
-  color: black;
-  // border-color: rgb(3, 230, 3);
-  background-color: green;
-  cursor: pointer;
-}
-
-// .game-constructor__alphBoard-btn 
-.game-constructor__alphBoard-btn.used {
-  color: gray;
-  border-color: rgb(240, 10, 10);
-  cursor: default;
-}
-
-// .game-constructor__alphBoard-btn 
-.game-constructor__alphBoard-btn.active:hover{
-  // font-size: 1.8em;
-  background-color: #fff;
-  transition: 0.5s;
-}
-
-/*settings block*/
 
 .settings-block {
   max-width: 600px;
@@ -1344,36 +1289,33 @@ footer {
   input[type="checkbox"] {
     margin-left: 10px;
   }
+
+  &__title {
+    text-align: center;
+  }
 }
 
-.settings-block__title {
-  text-align: center;
-}
-
-.group-0 {
+.group{
   background-color: #FFFFFF;
-  background-image: linear-gradient(180deg, #FFFFFF 0%, #9af783 5%, #9af783 95%, #ffffff 100%);
 
-}
-.group-1 {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #ffffff 0%, #22ff52 5%, #22ff52 95%, #ffffff 100%);
-}
-.group-2 {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #ffffff 0%, #85ff22 5%, #85ff22 95%, #ffffff 100%);
-}
-.group-3 {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #ffffff 0%, #d9ff00 5%, #d9ff00 95%, #ffffff 100%);
-}
-.group-4 {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #ffffff 0%, #ffb222 5%, #ffb222 95%, #ffffff 100%);
-}
-.group-5 {
-  background-color: #ffffff;
-  background-image: linear-gradient(180deg, #ffffff 0%, #fd5000 5%, #fd5000 95%, #ffffff 100%);
+  &-0 {
+    background-image: linear-gradient(180deg, #FFFFFF 0%, #9af783 5%, #9af783 95%, #ffffff 100%);
+  }
+  &-1 {
+    background-image: linear-gradient(180deg, #ffffff 0%, #22ff52 5%, #22ff52 95%, #ffffff 100%);
+  }
+  &-2 {
+    background-image: linear-gradient(180deg, #ffffff 0%, #85ff22 5%, #85ff22 95%, #ffffff 100%);
+  }
+  &-3 {
+    background-image: linear-gradient(180deg, #ffffff 0%, #d9ff00 5%, #d9ff00 95%, #ffffff 100%);
+  }
+  &-4 {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffb222 5%, #ffb222 95%, #ffffff 100%);
+  }
+  &-5 {
+    background-image: linear-gradient(180deg, #ffffff 0%, #fd5000 5%, #fd5000 95%, #ffffff 100%);
+  }
 }
 
 .stats-graphs-wrapper {
@@ -1384,10 +1326,8 @@ footer {
   background-color: #000;
 }
   
-
 .statistics-wrapper {
   padding: 25px;
-  max-width: 1280px;
   display: flex;
   flex-direction: column;
   align-items: center;
